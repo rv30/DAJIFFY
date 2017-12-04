@@ -15,6 +15,11 @@ class CreateUserHasMotive extends Migration
     {
         Schema::create('userHasMotive', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('idMotivo')->unsigned();
+            $table->foreign('idMotivo')->references('id')->on('motiveBan')->onDelete('cascade');
+            $table->integer('idUsuario')->unsigned();
+            $table->foreign('idUsuario')->references('id')->on('user')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

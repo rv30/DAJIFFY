@@ -15,6 +15,18 @@ class CreateUserBlocksUser extends Migration
     {
         Schema::create('userBlocksUser', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('idUsuarioAdmin')->unsigned();
+            $table->foreign('idUsuarioAdmin')->references('id')->on('user')->onDelete('cascade');
+
+            $table->integer('idUsuarioBaneado')->unsigned();
+            $table->foreign('idUsuarioBaneado')->references('id')->on('user')->onDelete('cascade');
+
+            $table->integer('idMotivo')->unsigned();
+            $table->foreign('idMotivo')->references('id')->on('motiveBan')->onDelete('cascade');
+
+            $table->date('fechaInicio');
+            $table->date('fechaFin');
+            $table->string('razon');
             $table->timestamps();
         });
     }

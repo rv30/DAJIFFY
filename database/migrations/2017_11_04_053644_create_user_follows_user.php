@@ -15,6 +15,12 @@ class CreateUserFollowsUser extends Migration
     {
         Schema::create('userFollowsUser', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('idUsuarioSigue')->unsigned();
+            $table->foreign('idUsuarioSigue')->references('id')->on('user')->onDelete('cascade');
+            
+            $table->integer('idUsuarioSeguido')->unsigned();
+            $table->foreign('idUsuarioSeguido')->references('id')->on('user')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

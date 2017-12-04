@@ -15,6 +15,14 @@ class CreateRequestTable extends Migration
     {
         Schema::create('request', function (Blueprint $table) {
             $table->increments('id');
+            $table->enum('estado',['Pendiente','Rechazada','Aceptada']);
+
+            $table->integer('idUsuarioSolicitante')->unsigned();
+            $table->foreign('idUsuarioSolicitante')->references('id')->on('user')->onDelete('cascade');
+            
+            $table->integer('idUsuarioResponde')->unsigned();
+            $table->foreign('idUsuarioResponde')->references('id')->on('user')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -15,6 +15,13 @@ class CreateUserLikesContent extends Migration
     {
         Schema::create('userLikesContent', function (Blueprint $table) {
             $table->increments('id');
+            
+            $table->integer('idUsuario')->unsigned();
+            $table->foreign('idUsuario')->references('id')->on('user')->onDelete('cascade');
+
+            $table->integer('idContenido')->unsigned();
+            $table->foreign('idContenido')->references('id')->on('content')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

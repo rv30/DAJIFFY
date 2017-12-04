@@ -15,6 +15,13 @@ class CreateUserReportsContent extends Migration
     {
         Schema::create('userReportsContent', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('idUsuario')->unsigned();
+            $table->foreign('idUsuario')->references('id')->on('user')->onDelete('cascade');
+
+            $table->integer('idContenido')->unsigned();
+            $table->foreign('idContenido')->references('id')->on('content')->onDelete('cascade');
+
+            $table->integer('verificado');
             $table->timestamps();
         });
     }

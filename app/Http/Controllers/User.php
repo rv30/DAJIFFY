@@ -13,7 +13,47 @@ class User extends Controller
      */
     public function index()
     {
-        //
+    
+        //return view('index'); 
+    }
+
+    public function login()
+    { 
+        return view('Notificaciones');
+    /*
+        $input = Request::only('correo','contrasenia');
+        $emailLog = $input['correo'];
+        $passLog = $input['contrasenia'];
+        try{
+            $selectUser = DB::select('select id,correo,contrasenia from user where correo = ?',[$emailLog]);
+            $resultCount = count($selectUser);
+            
+            if($resultCount > 0){
+                $result = json_decode(json_encode($selectUser),true)[0];
+                $idLog = $result['id'];
+                $nameLog = $result['nombre'];
+                $emailRes = $result['correo'];
+                $passRes = $result['contrasenia'];
+
+                if($passLog == $passRes) {
+
+                    session(['userId' => $idLog]);
+                    session(['userName'=> $nameLog]);
+
+                return view('busqueda');
+
+                }else{
+                    return view('Login');
+                    //echo "contraseña INcorrecta";
+                }
+                }else{
+                return view('Login');
+            }
+            
+        }catch(\Illuminate\Database\QueryException $e){
+            dd($e->getMessage());
+        }
+        */
     }
 
     /**

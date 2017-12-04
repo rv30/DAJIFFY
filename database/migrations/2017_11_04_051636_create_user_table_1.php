@@ -15,22 +15,28 @@ class CreateUserTable1 extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->string('correo');
-            $table->string('contrasenia');
-            $table->date('fechaNaciemiento');
-            $table->enum('genero',['masculino','femenino']);
-            $table->binary('avatar');
-            $table->binary('portada');
-            $table->enum('tipoUsuario',['Administrador','Usuario']);
-            $table->integer('privado');
-            $table->integer('activo');
-            $table->integer('bloqueado');
-            $table->integer('idCiudad')->unsigned();
+            $table->string('nombre')->nullable();
+            $table->string('userName')->unique();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->date('fechaNacimiento')->nullable();
+            $table->enum('genero',['masculino','femenino'])->nullable();
+            $table->string('avatar')->nullable();
+            //$table->binary('portada')->nullable();
+            $table->enum('tipoUsuario',['Administrador','Usuario'])->nullable();
+            $table->integer('privado')->nullable();
+            $table->integer('activo')->nullable();
+            $table->integer('bloqueado')->nullable();
+            //$table->integer('idCiudad')->unsigned()->nullable();
             
             
             $table->timestamps();
         });
+    }
+
+    public function up2()
+    {
+        
     }
 
 

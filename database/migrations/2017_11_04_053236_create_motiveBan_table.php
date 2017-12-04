@@ -15,6 +15,7 @@ class CreateMotiveBanTable extends Migration
     {
         Schema::create('motiveBan', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('motivo');
             $table->timestamps();
         });
     }
