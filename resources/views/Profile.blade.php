@@ -33,9 +33,11 @@
     
     <link rel="stylesheet" href="assets/css/combined.css">
 
+    <script type="text/javascript" src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/axios.js"></script>
+
     <!-- END: Styles -->
-
-
 
 </head>
 
@@ -59,10 +61,10 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="home.html">Home</a>
+                           <a href="/home">Home</a>
                         </li>
-                        <li class="active">
-                            <a href="profile.html">Profile</a>
+                        <li>
+                            <a href="/profile">Profile</a>
                         </li>
                     </ul>
 
@@ -146,7 +148,7 @@
 
 
 
-        <div class="container">
+        <div id="contenidos" class="container">
                         <div class="nk-comments">
                             <div class="row" style="background-color: #f6f6f6;">
                                 <div class="col-lg-12 offset-lg-0">
@@ -159,10 +161,15 @@
                                         </div>
                                         <div class="nk-comment-meta">
                                             <div class="nk-gap-2"></div>
-                                            <div class="nk-comment-name"><a href="#" style="font-size: 20px;">John Leonard</a></div>
+                                            <div class="nk-comment-name"><a href="#" style="font-size: 20px;">@{{usuario.nombre}}</a></div>
+                                            @if (usuario.id) == )
+                                            
+                                            @elseif (usuario.id == 1)
+                                                
+                                            @endif
                                             <div class="nk-comment-reply"><a href="#">Follow</a></div>
                                             <div class="nk-comment-reply"><a href="#">Unfollow</a></div><br><br>
-                                            <button class="nk-btn">Edit Profile</button>
+                                            <a href="/editProfile"><button class="nk-btn">Edit Profile</button></a>
                                             <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">100 Following</a></div>
                                             <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">55 Followers</a></div>
                                             <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">14 Posts</a></div>
@@ -174,8 +181,11 @@
                         </div>
                         <!-- END: Comment -->
 
+            <div id="contenidos">
             <div class="nk-portfolio-list nk-isotope nk-isotope-4-cols">
 
+            <ol>
+            <li v-for="lista in contenido">
                 <div class="nk-isotope-item">
                     <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
                         <a href="post-single.html" class="nk-portfolio-item-link"></a>
@@ -184,195 +194,18 @@
                         </div>
                         <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
                             <div>
+                                <h2 class="portfolio-item-title h3">@{{lista.titulo}} @{{lista.id}} @{{lista.tipo}}</h2>
+                                <div class="portfolio-item-category">@{{lista.descripcionContenido}}</div>
+
                                 <h2 class="portfolio-item-title h3">25 Likes</h2>
                             </div>
                         </div>
                     </div>
                 </div>
+            </li>
+            </ol>
 
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a href="post-single.html" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image">
-                            <div style="background-image: url('assets/images/portfolio-7-sm.jpg');"></div>
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+            </div>
             </div>
 
             <div class="nk-gap-4"></div>
@@ -411,19 +244,59 @@
         </footer>
         <!-- END: Footer -->
 
-
     </div>
-
-
-
-
     <!-- START: Scripts -->
 
     <script src="assets/js/combined.js"></script>
-    
+
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    new Vue({
+    el: "#contenidos",
+    data: {
+        usuario: {"nombre": "", "id": ""},
+        contenido: []
+        },
+        mounted: function() {
+            this.$nextTick(function() {
+                var contenidoVue = this.contenido;
+                axios.post("/vueSearchContent").then(function(response) {
+                        //content = response;
+                        for(index = 0; index < response.data.length; index ++){
+                            contenidoVue.push(response.data[index]);
+                        }
+                        console.log(contenidoVue);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                    this.datosUsuario();
+                })
+            },
+
+            methods: {
+                datosUsuario() {
+                var usuarioVue = this.usuario;
+                axios.post("/vueLoginStatus").then(function(response) {
+                        user = response;
+                        console.log(user.data[0].nombre);
+                        usuarioVue.nombre = user.data[0].nombre;
+                        usuarioVue.id = user.data[0].id;
+                        console.log(usuarioVue.nombre);
+                        //this.usuario.nombre = "hola";
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                }
+            }
+        });
+    });
+    </script>
+
     <!-- END: Scripts -->
-
-
 </body>
 
 </html>

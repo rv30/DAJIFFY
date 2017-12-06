@@ -25,6 +25,10 @@
     
     <link rel="stylesheet" href="assets/css/combined.css">
 
+    <script type="text/javascript" src="js/vue.js"></script>
+
+    <script type="text/javascript" src="js/axios.js"></script>
+
     <!-- END: Styles -->
 
 

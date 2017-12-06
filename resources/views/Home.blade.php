@@ -53,10 +53,10 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li class="active">
-                            <a href="home.html">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li>
-                            <a href="profile.html">Profile</a>
+                            <a href="/profile">Profile</a>
                         </li>
                     </ul>
 

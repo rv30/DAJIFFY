@@ -49,10 +49,10 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="home.html">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li class="active">
-                            <a href="profile.html">Profile</a>
+                            <a href="/profile">Profile</a>
                         </li>
                     </ul>
 
@@ -161,8 +161,8 @@
             </ul>
 
             <!-- END: Filter -->
-
-            <div id="busquedaContenido" class="nk-portfolio-list nk-isotope nk-isotope-3-cols">
+            <div id="busquedaContenido">
+            <div class="nk-portfolio-list nk-isotope nk-isotope-3-cols">
             <ol>
             <li v-for="lista in contenido">
                 <div class="nk-isotope-item" data-filter="Mockup">
@@ -181,6 +181,7 @@
                 </div>
             </li>
             </ol>
+            </div>
             </div>
 
             <div class="nk-gap-4"></div>
@@ -237,7 +238,7 @@
                     var contenidoVue = this.contenido;
                     //console.log(this.usuario);
                     axios.post("/vueSearchContent").then(function(response) {
-                        content = response;
+                        //content = response;
                         //contenidoVue.contenido = content.data[0].contenido;
                         for(index = 0; index < response.data.length; index ++){
                             contenidoVue.push(response.data[index]);
