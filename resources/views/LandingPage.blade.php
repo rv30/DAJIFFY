@@ -14,6 +14,8 @@
     <meta name="keywords" content="portfolio, clean, minimal, blog, template, portfolio website">
     <meta name="author" content="nK">
 
+    <meta name="csrf-token" id="mitoken" content="{{ csrf_token() }}">
+
     <link rel="icon" type="image/png" href="assets/images/icon-dajiffy.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +24,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
+
     <link rel="stylesheet" href="assets/css/combined.css">
 
     <!-- END: Styles -->
@@ -38,14 +40,14 @@
         //alert( "document loaded" );
         LandingPhoto();
     });
- 
+
     $( window ).on( "load", function() {
         console.log( "window loaded" );
     });
     </script>
 
     <script type="text/javascript">
-        function LandingPhoto() 
+        function LandingPhoto()
         {
             //document.getElementById("Landing").style.backgroundImage = "url('assets/images/landing1.jpg')";
             var description = [
@@ -66,7 +68,7 @@
         document.getElementById("Landing").style.backgroundImage = description[x];
         }
 
-        function validateLogin() 
+        function validateLogin()
         {
             //Campos requeridos
             var username = document.forms["LoginForm"]["username"].value;
@@ -282,13 +284,13 @@
                                 <input type="text" class="form-control required" name="username" v-model="usuario.userName" placeholder="Your User Name">
                             </div>
                             <div class="col-md-6">
-                                <input type="file" multiple :name="usuario.profile"  accept="image/*" class="input-file">
+                                <input type="file" id="profile" name="profile" @change="onFileChange" class="input-file">
                                 <!--<input type="file" class="form-control" name="avatar" multiple: name:"uploadFile" :disable"isSaving" @change:"filesCahnge($event.target.name, $ event.target.files); fileCount = $event.target.files.lenght" accept="image/*" class="input-file" placeholder="Your Avatar">-->
                             </div>
                         </div>
                         <div class="row vertical-gap">
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" name="name" v-model="usuario.name" placeholder="Your Name">
+                                <input type="text" class="form-control required" name="name" v-model="usuario.nombre" placeholder="Your Name">
                             </div>
                             <div class="col-md-6">
                                 <input type="text" class="form-control required" name="lastname" v-model="usuario.lastName" placeholder="Last Name">
@@ -296,11 +298,11 @@
                         </div>
                         <div class="row vertical-gap">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="birthday" v-model="usuario.birth" placeholder="Birthday dd/mm/yyyy">
+                                <input type="text" class="form-control" name="birthday" v-model="usuario.fechaNacimiento" placeholder="Birthday dd/mm/yyyy">
                             </div>
                             <div class="col-md-6">
-                                <label class="radio-inline"><input type="radio" name="gender" v-model="usuario.gender" value="Masculino">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" v-model="usuario.gender" value="Femenino">Female</label>
+                                <label class="radio-inline"><input type="radio" name="gender" v-model="usuario.genero" value="Masculino">Male</label>
+                                <label class="radio-inline"><input type="radio" name="gender" v-model="usuario.genero" value="Femenino">Female</label>
                             </div>
                         </div>
                         <div class="row vertical-gap">
@@ -334,25 +336,59 @@
             new Vue({
               el: '#registroFormulario',
               data: {
-
-                usuario: {"userName": "", "profile": "", "name": "", "lastName": "", "birth": "", "gender": "", "email": "", "password": ""}
-                
+                image: null,
+                usuario: {"userName": "", "avatar": "", "nombre": "", "lastName": "", "fechaNacimiento": "", "genero": "", "email": "", "password": ""},
+                token: ""
               },
               methods: {
-                registerUser: function() {
+                    onFileChange (e) {
+                      var fileReader = new FileReader()
+                        //console.log(e.target.files[0].type);
+                      if (e.target.files[0].type === 'image/jpeg' || e.target.files[0].type === 'image/png') {
+                        //console.log(e.target.files[0].type);
+                        const files = e.target.files || e.dataTransfer.files
+
+                        fileReader.readAsDataURL(e.target.files[0])
+                        fileReader.onload = (e) => {
+                          this.filename = [...files].map(file => file.name).join(', ')
+                          this.image = e.target.result
+                          //console.log(this.image);
+                        }
+                      } else {
+                        console.log('archivo no permitido')
+                      }
+                    },
+                    showToken(){
+
+                        //var metas = document.getElementsByTagName('meta'); {
+
+
+                      var t = document.getElementById('mitoken');
+                      this.token = t.getAttribute("content");
+                      //t.getAttribute("content");
+                        console.log(this.token);
+                    },
+                    registerUser: function() {
                     //this.usuario.email = document.getElementsByName('email')[0].value;
                     //this.usuario.pass = document.getElementsByName('pass')[0].value;
                     //nsole.log(this.usuario);
-                    var usuarioVue = this.usuario;
+                    //this.usuario.profile = document.getElementById('profile').files[0];
+                    //var usuarioVue = this.usuario;
+                    //usuarioVue.profile = document.getElementById('profile').files[0];
                     //console.log(this.usuario);
-                    axios.post("/vueRegisterUser", usuarioVue).
+                    var data = {
+                        usuario:this.usuario,
+                        imagen:this.image,
+                        token: this.token
+                    }
+                    axios.put("/vueRegisterUser", data).
                     then(function(response) {
-                        //console.log(response)
+                        console.log(response);
                         //user = response;
                         //var nombre = user.data[0].userName;
                         //var id = user.data[0].id;
                         //console.log(response);
-                        window.location.replace("/home");
+                        window.location.replace("/login");
                     })
                     .catch(function(error) {
                         //console.log(error);
@@ -396,7 +432,7 @@
 
     <script src="assets/js/combined.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    
+
     <!-- END: Scripts -->
 
 

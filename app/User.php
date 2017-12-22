@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $table="user";
-    protected $fillable = ['nombre', 'userName', 'email', 'fechaNacimiento', 'genero', 'avatar', 'tipoUsuario', 'privado', 'activo', 'bloqueado'
+    protected $fillable = ['nombre', 'password', 'userName', 'email', 'fechaNacimiento', 'genero', 'avatar', 'tipoUsuario', 'privado', 'activo', 'bloqueado'
     ];
 
     /**
@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 
     public function notification()

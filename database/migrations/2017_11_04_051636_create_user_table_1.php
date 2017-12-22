@@ -28,15 +28,15 @@ class CreateUserTable1 extends Migration
             $table->integer('activo')->nullable();
             $table->integer('bloqueado')->nullable();
             //$table->integer('idCiudad')->unsigned()->nullable();
-            
-            
+            $table->rememberToken();
+
             $table->timestamps();
         });
     }
 
     public function up2()
     {
-        
+
     }
 
 

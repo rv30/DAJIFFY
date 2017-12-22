@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,14 +22,19 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
-    <link rel="stylesheet" href="assets/css/combined.css">
 
-    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.27/vue.js"></script>-->
+    <link rel="stylesheet" href="assets/css/combined.css">
 
     <script type="text/javascript" src="js/vue.js"></script>
 
     <script type="text/javascript" src="js/axios.js"></script>
+
+    <style>
+        .miContenido{
+          position: relative !important;
+          display:block !important;
+        }
+    </style>
 
     <!-- END: Styles -->
 
@@ -34,9 +42,6 @@
 
 
 <body>
-    <div id="lol"> @{{usuario.nombre}} 
-        <div>@{{usuario.id}}</div>
-    </div>
 
 
     <header class="nk-header nk-header-opaque">
@@ -53,10 +58,10 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li class="active">
-                            <a href="/home">Home</a>
+                            <a href="" @click="logOut">LogOut</a>
                         </li>
                         <li>
-                            <a href="/profile">Profile</a>
+                            <a href="">{{ Auth::user()->userName }}</a>
                         </li>
                     </ul>
 
@@ -77,6 +82,9 @@
         <!-- END: Navbar -->
 
     </header>
+
+
+
 
     <!--
     START: Navbar Mobile
@@ -140,35 +148,35 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 offset-lg-2">
+                <!-- <div class="col-lg-8 offset-lg-2"> -->
                     <!-- START: Filter -->
-                    <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
+                    <!-- <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
                         <a href="#nk-toggle-filter">
                             <span class="nk-icon-squares"></span>
                         </a>
-                    </div>
+                    </div> -->
                     <!-- END: Filter -->
-
-                    <!-- START: Posts List -->
-                    <div class="nk-blog-isotope nk-isotope nk-isotope-gap nk-isotope-1-cols">
-
-
+                    <div id="app">
+                      <!-- <div class="nk-blog-isotope nk-isotope nk-isotope-gap nk-isotope-1-cols"> -->
+                      <div v-for="contenido in contenidos">
+                        <div class="miContenido">
                         <!-- START: Post -->
-                        <div class="nk-isotope-item" data-filter="Nature">
+                        <div class="nk-isotope-item">
                             <div class="nk-blog-post">
                                 <div class="nk-post-thumb">
                                     <a href="post-single.html">
                                         <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
                                     </a>
-                                    <div class="nk-post-category"><a href="#">Like</a></div>
+                                    <div class="nk-post-category"><button class="btn btn-primary">Like</button></div>
+                                    <div class="nk-post-category"><button class="btn btn-primary" @click="deletePost(contenido)">Delete</button></div>
                                 </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">Something I need to tell you</a></h2>
+                                <h2 class="nk-post-title h4"><a href="blog-single.html">@{{contenido.titulo}}</a></h2>
 
                                 <div class="nk-post-comments-count">14 Likes</div>
                                 <div class="nk-post-comments-count">2 Comments</div>
 
                                 <div class="nk-post-text">
-                                    <p>Gathering stars deep he For above open morning fruit blessed, void. Sea seed fruit were don't, days man second. In day isn't own Whales also evening it together.</p>
+                                    <p>@{{contenido.descripcionContenido}}</p>
                                 </div>
                                 <div class="nk-gap-1"></div>
                                 <div class="nk-post-meta">
@@ -176,111 +184,13 @@
                                 </div>
                             </div>
                         </div>
+                      </div>
                         <!-- END: Post -->
-
-                        <!-- START: Post -->
-                        <div class="nk-isotope-item" data-filter="Nature">
-                            <div class="nk-blog-post">
-                                <div class="nk-post-thumb">
-                                    <a href="post-single.html">
-                                        <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
-                                    </a>
-                                    <div class="nk-post-category"><a href="#">Like</a></div>
-                                </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">Something I need to tell you</a></h2>
-                                
-                                <div class="nk-post-comments-count">14 Likes</div>
-                                <div class="nk-post-comments-count">2 Comments</div>
-
-                                <div class="nk-post-text">
-                                    <p>Gathering stars deep he For above open morning fruit blessed, void. Sea seed fruit were don't, days man second. In day isn't own Whales also evening it together.</p>
-                                </div>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-post-meta">
-                                    <div class="nk-post-date">August 14, 2017</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END: Post -->
-
-                        <!-- START: Post -->
-                        <div class="nk-isotope-item" data-filter="Nature">
-                            <div class="nk-blog-post">
-                                <div class="nk-post-thumb">
-                                    <a href="post-single.html">
-                                        <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
-                                    </a>
-                                    <div class="nk-post-category"><a href="#">Like</a></div>
-                                </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">Something I need to tell you</a></h2>
-                                
-                                <div class="nk-post-comments-count">14 Likes</div>
-                                <div class="nk-post-comments-count">2 Comments</div>
-
-                                <div class="nk-post-text">
-                                    <p>Gathering stars deep he For above open morning fruit blessed, void. Sea seed fruit were don't, days man second. In day isn't own Whales also evening it together.</p>
-                                </div>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-post-meta">
-                                    <div class="nk-post-date">August 14, 2017</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END: Post -->
-
-                        <!-- START: Post -->
-                        <div class="nk-isotope-item" data-filter="Nature">
-                            <div class="nk-blog-post">
-                                <div class="nk-post-thumb">
-                                    <a href="post-single.html">
-                                        <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
-                                    </a>
-                                    <div class="nk-post-category"><a href="#">Like</a></div>
-                                </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">Something I need to tell you</a></h2>
-                                
-                                <div class="nk-post-comments-count">14 Likes</div>
-                                <div class="nk-post-comments-count">2 Comments</div>
-
-                                <div class="nk-post-text">
-                                    <p>Gathering stars deep he For above open morning fruit blessed, void. Sea seed fruit were don't, days man second. In day isn't own Whales also evening it together.</p>
-                                </div>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-post-meta">
-                                    <div class="nk-post-date">August 14, 2017</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END: Post -->
-
-                        <!-- START: Post -->
-                        <div class="nk-isotope-item" data-filter="Nature">
-                            <div class="nk-blog-post">
-                                <div class="nk-post-thumb">
-                                    <a href="post-single.html">
-                                        <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
-                                    </a>
-                                    <div class="nk-post-category"><a href="#">Like</a></div>
-                                </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">Something I need to tell you</a></h2>
-                                
-                                <div class="nk-post-comments-count">14 Likes</div>
-                                <div class="nk-post-comments-count">2 Comments</div>
-
-                                <div class="nk-post-text">
-                                    <p>Gathering stars deep he For above open morning fruit blessed, void. Sea seed fruit were don't, days man second. In day isn't own Whales also evening it together.</p>
-                                </div>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-post-meta">
-                                    <div class="nk-post-date">August 14, 2017</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END: Post -->
-
+                      </div>
+                    <!-- </div> -->
                     </div>
-                    <!-- END: Posts List -->
-                </div>
+
+                <!-- </div> -->
             </div>
 
             <div class="nk-gap-4"></div>
@@ -324,42 +234,53 @@
     </div>
 
 
-
-
     <!-- START: Scripts -->
 
     <script src="assets/js/combined.js"></script>
-    
-    <!-- END: Scripts -->
 
     <script>
-    
-    new Vue({
-    el: "#lol",
-    data: {
-        usuario: {"nombre": "", "id": ""}
-        //usuario:  "nombre": ""
-        },
-        mounted: function() {
-            this.$nextTick(function() {
-                var usuarioVue = this.usuario;
-                axios.post("/vueLoginStatus").then(function(response) {
-                        user = response;
-                        console.log(user.data[0].nombre);
-                        usuarioVue.nombre = user.data[0].nombre;
-                        usuarioVue.id = user.data[0].id;
-                        console.log(usuarioVue.nombre);
-                        //this.usuario.nombre = "hola";
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
+    document.addEventListener("DOMContentLoaded", function() {
+        new Vue({
+          el: '#app',
+          data: {
+            contenidos: [],
+            welcome: "hola"
+          },
+          created(){
+            axios.post("/vueContentUserProfile")
+            .then(res=>{
+              this.contenidos = res.data.contenidos;
+              console.log(this.contenidos);
+            })
+            console.log('creado');
+          },
+          methods: {
+            deletePost(post){
+                var index = this.contenidos.indexOf(post)
+                this.contenidos.splice(index,1)
+                axios.delete("/deletePost/" + post.id).
+                then(function(response) {
+
                 })
+              console.log(post);
+            },
+            logOut: function() {
+                console.log("loginOut");
+                axios.post("/logout").
+                then(function(response) {
+
+                    window.location.replace("/login");
+                })
+                .catch(function(error) {
+                    //console.log(error);
+                    });
+                }
             }
         });
-
+    });
     </script>
 
+    <!-- END: Scripts -->
 </body>
 
 </html>

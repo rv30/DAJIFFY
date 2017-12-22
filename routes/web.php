@@ -14,15 +14,17 @@
 Route::resource('index','User',
 	['only' => ['index','create','store']]);
 */
+Route::delete('deletePost/{id}', "ContentController@deletePost");
 
 Route::resource('User','UserController');
 
+Route::group(['middleware'=>'auth:api'], function(){
+    Route::post('/prueba',function(){
+        return view('AdminPage');
+    });
+});
 Route::get('/', function () {
-
-    //$user = DB::table('user')->get();
-    //dd($user);
-
-    return view('Login'); 
+    return view('Login');
 });
 
 Route::get('welcome', function () {
@@ -85,6 +87,12 @@ Route::get('singlePost', function () {
     return view('SinglePost');
 });
 
+Route::get('uploadPost', function () {
+    return view('UploadPost');
+});
+
+Route::get('profile/{id}', "UserController@loadProfile");
+
 //Route::prefix('/app/Http/Controllers')->group(function () {
 //    Route::get('/vueLogin', 'UserController@login');
 //});
@@ -93,7 +101,11 @@ Route::post("/vueLogin","UserController@login");
 
 Route::post("/vueLoginStatus","UserController@statusLogin");
 
-Route::post("/vueRegisterUser","UserController@registerUser");
+Route::post("/vueContentUserProfile","ContentController@userContents");
+
+Route::post("/vueUploadContent","ContentController@uploadPost");
+
+Route::put("/vueRegisterUser","UserController@registerUser");
 
 Route::post("/vueSearchContent","SearchController@searchContent");
 
@@ -104,3 +116,7 @@ Route::post("/vueSearchContent","SearchController@searchContent");
 //Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

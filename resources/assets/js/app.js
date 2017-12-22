@@ -4,6 +4,14 @@ import Vue from 'vue'
 
 import VueAxios from 'vue-axios'
 
+//import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue);
+
 /*
 axios.interceptors.request.use(function(config)
 {
@@ -37,6 +45,6 @@ Vue.component('example', require('./components/Example.vue'));
 const app = new Vue({
     el: '#app',
     data: {
-    	message:"DLV"
+    	message:"ok"
     }
 });

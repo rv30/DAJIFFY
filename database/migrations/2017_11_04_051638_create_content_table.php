@@ -21,10 +21,14 @@ class CreateContentTable extends Migration
             $table->string('titulo');
             $table->text('descripcionContenido');
             $table->integer('activo');
-            $table->integer('idUsuario')->unsigned();
+            $table->integer('idUsuario')->unsigned()->nullable();
             //$table->foreign('idUsuario')->references('id')->on('user')->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::table('content', function($table) {
+        $table->foreign('idUsuario')->references('id')->on('user')->onDelete('cascade');
+      });
     }
 
     /**

@@ -22,7 +22,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
+
     <link rel="stylesheet" href="assets/css/combined.css">
 
     <script type="text/javascript" src="js/vue.js"></script>
@@ -150,7 +150,7 @@
                     <form class="nk-form nk-form-ajax" id="loginFormulario" v-on:submit.prevent="loginUser" method="post" enctype="multipart/form-data">
 
                         <input type="email" class="form-control required" name="email" v-model="usuario.email" placeholder="Email"><br>
-                        <input type="password" class="form-control required" name="pass" v-model="usuario.pass" placeholder="Password"/>
+                        <input type="password" class="form-control required" name="pass" v-model="usuario.password" placeholder="Password"/>
 
                         <div class="nk-gap-1"></div>
                         <div class="nk-form-response-success"></div>
@@ -200,8 +200,8 @@
           el: '#loginFormulario',
           data: {
 
-            usuario: {"email": "","pass": ""}
-            
+            usuario: {"email": "","password": ""}
+
           },
           methods: {
             loginUser: function() {
@@ -210,12 +210,13 @@
                 //nsole.log(this.usuario);
                 var usuarioVue = this.usuario;
                 //console.log(this.usuario);
-                axios.post("/vueLogin", usuarioVue).
+                axios.post("/login", usuarioVue).
                 then(function(response) {
-                    //user = response;
+                    user = response;
+                    //usuarioVue.id = user.data;
                     //var nombre = user.data[0].userName;
                     //var id = user.data[0].id;
-                    //console.log(response);
+                    console.log(response);
                     window.location.replace("/home");
                 })
                 .catch(function(error) {
@@ -231,7 +232,7 @@
     <!-- START: Scripts -->
 
     <script src="assets/js/combined.js"></script>
-    
+
     <!-- END: Scripts -->
 
 

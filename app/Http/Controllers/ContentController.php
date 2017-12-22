@@ -4,92 +4,92 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\ContentModel;
+
+use DB;
+use Auth;
+use File;
+use Image;
+
 class ContentController extends Controller
 {
     public function uploadPost(Request $request)
     {
-    	$content = new ContentModel();
-		$input = Request::only('contenido','titulo','descripcionContenido');
-        //$content = $input['contenido'];
-        //$typeContent
-        $visible = 1;
-        $dateUpload = 'now()';
-        $title = $input['titulo'];
-        $description = $input['descripcionContenido'];
-        $active = 1;
-        $id = $_SESSION['idUsuario'];
-        /*
-        $file_tmp = $input['contenido']['tmp_name'];
-        $file_type = $input['contenido']['type'];
-        $file_ext = strtolower(end(explode('.',$input['contenido']['name'])));
-      
-        $image = file_get_contents($file_tmp);
-        
-        if($file_type == 'image/jpeg' || $file_type == 'image/png' || $file_type == 'image/bmp')
-        {
-            $base64 = 'data:image/' . $file_ext . ';base64,' . base64_encode($image);
-            $file_type = "Imagen";
-        }
-        
-        else if($file_type == 'video/avi' || $file_type == 'video/mpeg' || $file_type == 'video/webm')
-        {
-            $base64 = 'data:video/' . $file_ext . ';base64,' . base64_encode($image);
-            $file_type = "Video";
-        }
-        
-        else if($file_type == 'audio/mpeg')
-        {
-            $file_type = "Audio";
-        }
-		*/
-        if(isset($input['contenido']))
-            {
-            $file_tmp_Contenido =$input['contenido']['tmp_name'];
-            $file_type_Contenido=$input['contenido']['type'];
-            $file_ext_Contenido=strtolower(end(explode('.',$input['contenido']['name'])));
-            $imageAvatar = file_get_contents($file_tmp_Avatar);
-            if($file_type_contenido == 'image/jpeg' || $file_type_Avatar == 'image/png' || $file_type_Avatar == 'image/bmp')
-            {
-            $base64contenido = 'data:image/' . $file_ext_Avatar . ';base64,' . base64_encode($imageAvatar);
-            $file_type_Contenido = "Imagen";
-            }
-        }
+      $imagen = $request['imagen'];
+      $contenido = $request['contenido'];
+      //$content = new ContentModel();
+      $usuario = Auth::user();
+      //$path = " ";
+      try{
+          if ($imagen != "") {
+          $folder=File::makeDirectory(public_path('uploads/Usuarios/' . $usuario->userName.'/contentsUser'), 0775, true, true);
+                   $exploded=explode(',',$imagen);
 
-	        try{
-		        DB::table('users')->insert([
-		        ['contenido' => $base64contenido],
-		    	['tipo' => $title],
-		    	['visible' => $visible],
-		    	['fechaSubida' => $dateUpload],
-		    	['titulo' => $title],
-		    	['descripcionContenido' => $description],
-		    	['activo' => $active],
-		    	['idUsuario' => $id]
-		    ]);
+                  if (str_contains($exploded[0],'jpeg')) {
+                      $extensionFile="jpg";
+                  }else if(str_contains($exploded[0],'png')){
 
-    	return Redirect::to('notificaciones');
+                      $extensionFile="png";
+                  }else{
+                      $extensionFile="";
+                  }
 
-    	}catch(\Illuminate\Database\QueryException $e){
-            dd($e->getMessage());
-        } 
+                  $filename= str_random() .'-'.str_random() .'-'. time() . '.' . $extensionFile;
+                  if ($extensionFile!="")
+                  {
+                  Image::make($exploded[1])->save(public_path('uploads/Usuarios/'. $usuario->userName. '/contentsUser/' . $filename));
+
+                  }
+                  else{
+                      $filename="avatar.jpg";
+                  }
+      }
+      $contenido['content'] = $filename;
+      $contenido['tipo'] = 'Imagen';
+      $contenido['visible'] = 1;
+      $contenido['activo'] = 1;
+      $contenido['idUsuario'] = $usuario->id;
+      // $content=ContentModel::create([
+      //       "content"=> ,
+      //       "tipo" => "Imagen",
+      //       "visible" => 1,
+      //       "titulo" => $contenido["titulo"],
+      //       "descripcionContenido" => $contenido['descripcionContenido'],
+      //       "activo" => 1,
+      //       "idUsuario" => $usuario->id
+      //         ]);
+      $content=ContentModel::create($contenido);
+      return response()->json(['contenido'=> $content, "message"=>"EXITOSO"]);
+
+      }catch(\Illuminate\Database\QueryException $e){
+          dd($e->getMessage());
+      }
     }
 
-    public function deletePost(Request $request)
-    {	       
-	        try{
-		        DB::table('content')
-	            ->where('idContenido', $_SESSION['idContenido'])
-	            ->update(['activo' => 0]);
+    public function userContents(Request $request)
+    {
+        try{
+            $id = Auth::user()->id;
+            $content = new ContentModel();
+            //$content = DB::table('content')->where('idUsuario', '=', $id )->get();
+            $content = ContentModel::where('idUsuario','=',$id)->get();
+            return response()->json(['contenidos'=> $content]);
+            //return $idUsuarioLogeado;
 
-    	return Redirect::to('index');
-
-    	}catch(\Illuminate\Database\QueryException $e){
+        }catch(\Illuminate\Database\QueryException $e){
             dd($e->getMessage());
-        } 
+        }
+    }
+
+    public function deletePost($id)
+    {
+        $content = ContentModel::where('id', '=', $id)->first();
+        $content->delete();
     }
 
     public function editPost(Request $request)
-    {	
+    {
+        /*
     	$content = new ContentModel();
 		$input = Request::only('titulo','descripcionContenido');
 
@@ -107,7 +107,8 @@ class ContentController extends Controller
 
     	}catch(\Illuminate\Database\QueryException $e){
             dd($e->getMessage());
-        } 
+        }
+        */
     }
 
 }

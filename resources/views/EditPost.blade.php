@@ -22,8 +22,13 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
+
     <link rel="stylesheet" href="assets/css/combined.css">
+
+
+        <script type="text/javascript" src="js/vue.js"></script>
+
+        <script type="text/javascript" src="js/axios.js"></script>
 
     <!-- END: Styles -->
 

@@ -30,7 +30,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
+
     <link rel="stylesheet" href="assets/css/combined.css">
 
     <script type="text/javascript" src="js/vue.js"></script>
@@ -148,7 +148,7 @@
 
 
 
-        <div id="contenidos" class="container">
+        <div id="infoPerfil" class="container">
                         <div class="nk-comments">
                             <div class="row" style="background-color: #f6f6f6;">
                                 <div class="col-lg-12 offset-lg-0">
@@ -162,11 +162,10 @@
                                         <div class="nk-comment-meta">
                                             <div class="nk-gap-2"></div>
                                             <div class="nk-comment-name"><a href="#" style="font-size: 20px;">@{{usuario.nombre}}</a></div>
-                                            @if (usuario.id) == )
-                                            
-                                            @elseif (usuario.id == 1)
-                                                
-                                            @endif
+                                            <div class="nk-comment-name"><a href="#" style="font-size: 20px;">@{{usuario.userName}}</a></div>
+                                            <!--
+                                                aqui
+                                            -->
                                             <div class="nk-comment-reply"><a href="#">Follow</a></div>
                                             <div class="nk-comment-reply"><a href="#">Unfollow</a></div><br><br>
                                             <a href="/editProfile"><button class="nk-btn">Edit Profile</button></a>
@@ -180,8 +179,6 @@
                             </div>
                         </div>
                         <!-- END: Comment -->
-
-            <div id="contenidos">
             <div class="nk-portfolio-list nk-isotope nk-isotope-4-cols">
 
             <ol>
@@ -206,7 +203,6 @@
             </ol>
 
             </div>
-            </div>
 
             <div class="nk-gap-4"></div>
         </div>
@@ -216,8 +212,6 @@
             <a href="#">Load More Works</a>
         </div>
         <!-- END: Pagination -->
-
-
 
         <!--
     START: Footer
@@ -249,42 +243,42 @@
 
     <script src="assets/js/combined.js"></script>
 
-
-
     <script>
     document.addEventListener("DOMContentLoaded", function() {
     new Vue({
-    el: "#contenidos",
+    el: "#infoPerfil",
     data: {
-        usuario: {"nombre": "", "id": ""},
+        usuario: user,
         contenido: []
         },
-        mounted: function() {
-            this.$nextTick(function() {
-                var contenidoVue = this.contenido;
-                axios.post("/vueSearchContent").then(function(response) {
-                        //content = response;
-                        for(index = 0; index < response.data.length; index ++){
-                            contenidoVue.push(response.data[index]);
-                        }
-                        console.log(contenidoVue);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-                    this.datosUsuario();
-                })
-            },
-
+        // mounted: function() {
+        //     this.$nextTick(function() {
+        //         var contenidoVue = this.contenido;
+        //         axios.post("/vueContentUserProfile").then(function(response) {
+        //                 content = response;
+        //                 //console.log(response.data.idUsuarioActual);
+        //                 for(index = 0; index < response.data.length; index ++){
+        //                     contenidoVue.push(response.data[index]);
+        //                 }
+        //                 console.log(contenidoVue);
+        //             })
+        //             .catch(function(error) {
+        //                 console.log(error);
+        //             });
+        //             this.datosUsuario();
+        //         })
+        //     },
             methods: {
                 datosUsuario() {
                 var usuarioVue = this.usuario;
-                axios.post("/vueLoginStatus").then(function(response) {
+                axios.post("profile/{ }").then(function(response) {
                         user = response;
-                        console.log(user.data[0].nombre);
-                        usuarioVue.nombre = user.data[0].nombre;
-                        usuarioVue.id = user.data[0].id;
-                        console.log(usuarioVue.nombre);
+                        //console.log(user.data[0].nombre);
+                        usuarioVue.nombre = user.data.nombre;
+                        usuarioVue.userName = user.data.userName;
+                        usuarioVue.id = user.data.id;
+                        usuarioVue.avatar = user.data.avatar;
+                        //console.log(usuarioVue.nombre);
                         //this.usuario.nombre = "hola";
                     })
                     .catch(function(error) {
