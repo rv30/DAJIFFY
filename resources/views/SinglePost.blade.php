@@ -14,7 +14,9 @@
     <meta name="keywords" content="portfolio, clean, minimal, blog, template, portfolio website">
     <meta name="author" content="nK">
 
-    <link rel="icon" type="image/png" href="assets/images/icon-dajiffy.png">
+    <!-- <link rel="icon" type="image/png" href="assets/images/icon-dajiffy.png"> -->
+
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/icon-dajiffy.png') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -22,20 +24,24 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
-    <link rel="stylesheet" href="assets/css/combined.css">
+
+    <!-- <link rel="stylesheet" href="assets/css/combined.css"> -->
+
+    <link rel="stylesheet" href="{{ asset('assets/css/combined.css') }}" type='text/css'/>
+
+    <script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('js/axios.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('js/moment.js') }}"></script>
 
     <!-- END: Styles -->
 
-
 </head>
 
-
 <body>
-
-
-
-
+  <div id="infoContenido">
+    <div v-if="contenido != null">
     <header class="nk-header nk-header-opaque">
         <!--
         START: Navbar
@@ -44,16 +50,16 @@
             <div class="container">
                 <div class="nk-nav-table">
                     <a href="home.html" class="nk-nav-logo">
-                        <img src="assets/images/logo-light.svg" alt="" width="85" class="nk-nav-logo-onscroll">
-                        <img src="assets/images/logoSVG-dajiffy.svg" alt="" width="85">
+                        <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
+                        <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="home.html">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li class="active">
-                            <a href="profile.html">Profile</a>
+                            <a href="/profile/{{Auth::user()->id}}">{{ Auth::user()->userName }}</a>
                         </li>
                     </ul>
 
@@ -75,9 +81,6 @@
 
     </header>
 
-
-
-
     <!--
     START: Navbar Mobile
 -->
@@ -92,7 +95,7 @@
 
                         <div class="nk-nav-logo">
                             <a href="index.html" class="nk-nav-logo">
-                                <img src="assets/images/logo-light.svg" alt="" width="85">
+                                <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85">
                             </a>
                         </div>
 
@@ -131,14 +134,14 @@
     </nav>
     <!-- END: Navbar Mobile -->
 
-
     <div class="nk-main">
 
         <!-- START: Header Title -->
         <div class="nk-header-title nk-header-title-lg">
             <div class="bg-image">
-                <div style="background-image: url('assets/images/post-6.jpg');"></div>
-
+                <!-- <div style="background-image: url('uploads/Usuarios/adasdas/contentUser/boi)'"></div> -->
+                <!-- <h1 value="{{ Request::url() }}"></h1> -->
+                <img :src="'http://dajiffy.test:8000/vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content">
             </div>
             <div class="nk-header-table">
                 <div class="nk-header-table-cell">
@@ -164,25 +167,26 @@
                     <div class="nk-gap-1"></div>
                     <!-- START: Post -->
                     <div class="nk-blog-post nk-blog-post-single">
-                        <h1 class="display-4">Why you should Always First</h1>
 
+                      <h1 class="display-4" v-if="contenido != null">@{{contenido.titulo}}</h1>
                         <div class="nk-post-meta">
                             <div class="nk-post-comments-count">14 Likes</div>
                             <div class="nk-post-comments-count">2 Comments</div>
                             <div class="nk-post-category"><a href="#">Like</a></div>
                             <div class="nk-post-category"><a href="#">Report</a></div>
-                            <div class="nk-post-category"><a href="#">Edit</a></div>
-                            <div class="nk-post-category"><a href="#">Delete</a></div>
+                            <div class="nk-post-category"><a :href="'http://dajiffy.test:8000/editPost/' + contenido.id">Edit</a></div>
+                            <!-- <div class="nk-post-category"><a :href="'http://dajiffy.test:8000/vueDeleteContent/' + contenido.id">Delete</a></div> -->
+                            <div class="nk-post-category"><a href="" @click="deletePost(contenido.id)">Delete</a></div>
                         </div>
 
                         <!-- START: Post Text -->
-                        <div class="nk-post-text">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque rhoncus orci a purus lacinia consectetur. Vestibulum rutrum ex in odio placerat dictum. Morbi sit amet tortor mollis, tincidunt magna a, iaculis nisl. Cras varius odio a arcu rutrum, nec posuere lacus imperdiet. Proin iaculis, nibh eleifend elementum pulvinar, erat nisl consequat quam, ac ornare est sem nec libero. Fusce ac sagittis quam. Phasellus mattis, nunc a venenatis laoreet, est ipsum consectetur turpis, in ullam corper urna tortor eu purus.</p>
+                        <div class="nk-post-text"  v-if="contenido != null">
+                            <p>@{{contenido.descripcionContenido}}</p>
                         </div>
                         <!-- END: Post Text -->
 
-                        <div class="nk-post-meta">
-                            <div class="nk-post-date">August 14, 2016</div>
+                        <div class="nk-post-meta"  v-if="contenido != null">
+                            <div class="nk-post-date">@{{getTime(contenido.created_at)}}</div>
                         </div>
 
                         <!-- START: Post Share -->
@@ -237,7 +241,7 @@
                         <div class="nk-comment">
                             <div class="nk-comment-avatar">
                                 <a href="#">
-                                    <img src="assets/images/avatar-1.jpg" alt="">
+                                    <img src="{{ asset('assets/images/avatar-1.jpg') }}" alt="">
                                 </a>
                             </div>
                             <div class="nk-comment-meta">
@@ -253,7 +257,7 @@
                             <div class="nk-comment">
                                 <div class="nk-comment-avatar">
                                     <a href="#">
-                                        <img src="assets/images/avatar-2.jpg" alt="">
+                                        <img src="{{ asset('assets/images/avatar-2.jpg') }}" alt="">
                                     </a>
                                 </div>
                                 <div class="nk-comment-meta">
@@ -273,7 +277,7 @@
                         <div class="nk-comment">
                             <div class="nk-comment-avatar">
                                 <a href="#">
-                                    <img src="assets/images/avatar-3.jpg" alt="">
+                                    <img src="{{ asset('assets/images/avatar-3.jpg') }}" alt="">
                                 </a>
                             </div>
                             <div class="nk-comment-meta">
@@ -306,8 +310,6 @@
         </div>
         <!-- END: Pagination -->
 
-
-
         <!--
     START: Footer
 -->
@@ -335,13 +337,51 @@
 
 
     </div>
-
+    </div>
+  </div>
 
 
 
     <!-- START: Scripts -->
 
-    <script src="assets/js/combined.js"></script>
+    <script src="{{ asset('assets/js/combined.js') }}"></script>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+    new Vue({
+    el: "#infoContenido",
+    data: {
+        contenido: null,
+        },
+        methods: {
+          getTime(fecha) {
+            //moment.locale('de');
+            //moment.locale('es-ES');
+            var date2 = moment(fecha).fromNow();
+            return date2;
+          },
+          deletePost(id) {
+            axios.delete("/vueDeleteContent/" + id)
+            .then(res=>{
+              window.location.replace("/home");
+            })
+          }
+        },
+        mounted(){
+          var url = window.location.href;
+          var res = url.split('/');
+          var id = res[4];
+          axios.post("/vueLoadSinglePost/"+ id)
+          .then(res=>{
+            this.contenido = res.data.contenido;
+            console.log(this.contenido);
+          })
+        }
+      })
+    })
+    </script>
 
     <!-- END: Scripts -->
 

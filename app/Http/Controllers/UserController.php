@@ -35,17 +35,24 @@ class UserController extends Controller
     {
         $user = new User();
         try{
-            $user = DB::table('user')->where([
-            ['email', '=', $request->email],
-            ['password', '=', $request->pass],
-        ])->get();
-        $request->session()->forget('user');
-        session(['user'=> $user]);
+        //     $user = DB::table('user')->where([
+        //     ['email', '=', $request->email],
+        //     ['password', '=', $request->pass],
+        // ])->get();
+        // $request->session()->forget('user');
+        // session(['user'=> $user]);
 
-        $result = json_decode(json_encode($user),true)[0];
-        session(['idUsuarioLogeado'=> $result['id']]);
+        if (Auth::attempt(['email' =>  $request->email, 'password' => $request->pass]))
+       {
+           echo 'logeado';
+       }
 
-        return $request->session()->get('idUsuarioLogeado');
+       echo 'no logeado';
+
+        //$result = json_decode(json_encode($user),true)[0];
+        //session(['idUsuarioLogeado'=> $result['id']]);
+
+        //return $request->session()->get('idUsuarioLogeado');
         }catch(\Illuminate\Database\QueryException $e){
             dd($e->getMessage());
         }
@@ -60,11 +67,16 @@ class UserController extends Controller
 
     public function loadProfile($id)
     {
-        $user = DB::table('user')
-        ->where('id', '=', $id)->get();
-
+      try{
+        // $user = DB::table('user')
+        // ->where('id', '=', $id)->get();
+        $userProfile = User::where('id','=',$id)->with('contents')->first();
+        return response()->json(['usuarioPerfil'=> $userProfile]);
         //return view('Profile', compact('user'));
-        return response()->json(['usuario'=> $user]);
+        //return response()->json(['usuario'=> $user]);
+      }catch(\Illuminate\Database\QueryException $e){
+          dd($e->getMessage());
+      }
     }
 
     public function registerUser(Request $request)
@@ -122,9 +134,8 @@ class UserController extends Controller
 
     public function logOut(Request $request)
     {
-		//$user = $request->session()->get('user')
-		//$request->session()->flush('user');
-		//return Redirect::to('notificaciones');
+		    Auth::logout();
+        return response()->json(['Mensaje'=> 'Sesion Cerrada']);
     }
     /**
      * Show the form for creating a new resource.

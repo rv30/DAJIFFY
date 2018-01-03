@@ -14,6 +14,11 @@
 Route::resource('index','User',
 	['only' => ['index','create','store']]);
 */
+
+Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');
+
 Route::delete('deletePost/{id}', "ContentController@deletePost");
 
 Route::resource('User','UserController');
@@ -23,6 +28,15 @@ Route::group(['middleware'=>'auth:api'], function(){
         return view('AdminPage');
     });
 });
+
+Route::get('home', function () {
+    return view('Home');
+});
+
+Route::get('prueba', function () {
+    return view('Prueba');
+});
+
 Route::get('/', function () {
     return view('Login');
 });
@@ -59,10 +73,6 @@ Route::get('follows', function () {
     return view('Follows');
 });
 
-Route::get('home', function () {
-    return view('Home');
-});
-
 Route::get('landingPage', function () {
     return view('LandingPage');
 });
@@ -83,15 +93,25 @@ Route::get('search', function () {
     return view('Search');
 });
 
-Route::get('singlePost', function () {
+Route::get('singlePost/{id}', function ($id) {
     return view('SinglePost');
+});
+
+Route::get('profile/{id}', function ($id){
+    return view('Profile');
+});
+
+Route::get('editPost/{id}', function ($id){
+    return view('EditPost');
 });
 
 Route::get('uploadPost', function () {
     return view('UploadPost');
 });
 
-Route::get('profile/{id}', "UserController@loadProfile");
+// Route::get('deletePost/{id}', function ($id){
+//     return view('Profile');
+// });
 
 //Route::prefix('/app/Http/Controllers')->group(function () {
 //    Route::get('/vueLogin', 'UserController@login');
@@ -101,13 +121,37 @@ Route::post("/vueLogin","UserController@login");
 
 Route::post("/vueLoginStatus","UserController@statusLogin");
 
+Route::put("/vueRegisterUser","UserController@registerUser");
+
+Route::get("/vueLoadProfile/{id}", "UserController@loadProfile");
+
+Route::post("/vueLogOut","UserController@logOut");
+
+Route::get("/vueGetProfileImage/{userName}/{name}","ContentController@getProfileImage");
+
 Route::post("/vueContentUserProfile","ContentController@userContents");
 
 Route::post("/vueUploadContent","ContentController@uploadPost");
 
-Route::put("/vueRegisterUser","UserController@registerUser");
+Route::post("/vueEditContent","ContentController@editPost");
+
+Route::delete("/vueDeleteContent/{id}","ContentController@deletePost");
+
+Route::post("/vueLoadSinglePost/{id}","ContentController@loadSinglePost");
+
+Route::get("/vueGetContentImage/{userName}/{name}","ContentController@getContentImage");
+
+// Route::get("/content/{id}","ContentController@loadSinglePost"){
+//   return view('SinglePost');
+// };
 
 Route::post("/vueSearchContent","SearchController@searchContent");
+
+Route::get("/vueSearchTitle","SearchController@searchTitleContents");
+
+Route::post("/vueSearchDesc","SearchController@searchDescriptionContents");
+
+Route::post("/vueSearchDate","SearchController@searchDateContents");
 
 //Route::post('indexPrueba','User@login');
 
@@ -117,6 +161,4 @@ Route::post("/vueSearchContent","SearchController@searchContent");
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');

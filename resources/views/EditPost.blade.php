@@ -14,7 +14,7 @@
     <meta name="keywords" content="portfolio, clean, minimal, blog, template, portfolio website">
     <meta name="author" content="nK">
 
-    <link rel="icon" type="image/png" href="assets/images/icon-dajiffy.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/icon-dajiffy.png') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,12 +23,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" href="assets/css/combined.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/combined.css') }}" type='text/css'/>
 
+    <script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
 
-        <script type="text/javascript" src="js/vue.js"></script>
-
-        <script type="text/javascript" src="js/axios.js"></script>
+    <script type="text/javascript" src="{{ asset('js/axios.js') }}"></script>
 
     <!-- END: Styles -->
 
@@ -49,16 +48,16 @@
             <div class="container">
                 <div class="nk-nav-table">
                     <a href="home.html" class="nk-nav-logo">
-                        <img src="assets/images/logo-light.svg" alt="" width="85" class="nk-nav-logo-onscroll">
-                        <img src="assets/images/logoSVG-dajiffy.svg" alt="" width="85">
+                      <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
+                      <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="home.html">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li class="active">
-                            <a href="profile.html">Profile</a>
+                            <a href="/profile/{{Auth::user()->id}}">{{ Auth::user()->userName }}</a>
                         </li>
                     </ul>
 
@@ -97,7 +96,7 @@
 
                         <div class="nk-nav-logo">
                             <a href="index.html" class="nk-nav-logo">
-                                <img src="assets/images/logo-light.svg" alt="" width="85">
+                                <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85">
                             </a>
                         </div>
 
@@ -140,7 +139,7 @@
     <div class="nk-main">
 
         <!-- START: Header Title -->
-        <div class="nk-header-title nk-header-title-lg">
+        <!-- <div class="nk-header-title nk-header-title-lg">
             <div class="bg-image">
                 <div style="background-image: url('assets/images/post-6.jpg');"></div>
 
@@ -156,26 +155,26 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
         <!-- END: Header Title -->
 
 
 
-
+        <div id="editarContenido">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 offset-lg-2">
                     <div class="nk-gap-1"></div>
                     <!-- START: Post -->
                     <div class="nk-blog-post nk-blog-post-single">
-                        <form action="#" class="nk-form nk-form-ajax">
+                        <form v-on:submit.prevent="editPost" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax">
                             <div class="nk-gap-1"></div>
-                            <input type="text" class="form-control required" name="NewTitle" placeholder="New  Title">
+                            <input type="text" class="form-control required" v-model="contenido.titulo" name="NewTitle" placeholder="New  Title">
                             <div class="nk-gap-1"></div>
-                            <textarea class="form-control required" name="message" rows="8" placeholder="Your Comment" aria-required="true"></textarea>
+                            <textarea class="form-control required" v-model="contenido.descripcionContenido" name="message" rows="8" placeholder="Your Comment" aria-required="true"></textarea>
                             <div class="nk-gap-1"></div>
-                            <button class="nk-btn">Update</button>
+                            <input type="submit" class="nk-btn" value="Update"></input>
                             <button class="nk-btn">Cancel</button>
                         </form>
                     </div>
@@ -184,7 +183,7 @@
                 </div>
             </div>
         </div>
-
+        </div>
         <!-- START: Footer -->
         <footer class="nk-footer">
 
@@ -216,9 +215,51 @@
 
     <!-- START: Scripts -->
 
-    <script src="assets/js/combined.js"></script>
+    <script src="{{ asset('assets/js/combined.js') }}"></script>
 
     <!-- END: Scripts -->
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+    new Vue({
+    el: "#editarContenido",
+    data: {
+        contenido: {
+          descripcionContenido:"",
+          titulo:""
+          }
+        },
+        methods: {
+          editPost() {
+            var url = window.location.href;
+            var res = url.split('/');
+            var id = res[4];
+
+            var data = {
+                contenido:this.contenido
+            }
+            axios.post("/vueEditContent", data)
+            .then(res=>{
+              this.contenido = res.data.contenido;
+              console.log(this.contenido);
+              window.location.replace("/singlePost/"+ id);
+            })
+          }
+        },
+        mounted(){
+          var url = window.location.href;
+          var res = url.split('/');
+          var id = res[4];
+          axios.post("/vueLoadSinglePost/"+ id)
+          .then(res=>{
+            this.contenido = res.data.contenido;
+            console.log(this.contenido);
+          })
+        }
+      })
+    })
+    </script>
 
 
 </body>

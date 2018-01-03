@@ -1,6 +1,3 @@
-<?php
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,11 +55,12 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li class="active">
-                            <a href="" @click="logOut">LogOut</a>
+                            <a href="" @click="logOut()">LogOut</a>
+                            <!-- <button class="nk-btn" @click="logOut">Log Out</button> -->
                         </li>
-                        <li>
-                            <a href="">{{ Auth::user()->userName }}</a>
-                        </li>
+                        <li><a href="/profile/{{Auth::user()->id}}">
+                            {{ Auth::user()->userName }}
+                        </a></li>
                     </ul>
 
                     <ul class="nk-nav nk-nav-right nk-nav-icons">
@@ -116,7 +114,7 @@
                         <div class="nk-nav-table">
                             <div class="nk-nav-row nk-nav-row-full nk-nav-row-center nk-navbar-mobile-content">
                                 <ul class="nk-nav">
-                                    <!-- Here will be inserted menu from [data-mobile-menu="#nk-nav-mobile"] -->
+
                                 </ul>
                             </div>
                         </div>
@@ -141,31 +139,19 @@
 
 
     <div class="nk-main">
-
-
-
-
-
         <div class="container">
             <div class="row">
-                <!-- <div class="col-lg-8 offset-lg-2"> -->
-                    <!-- START: Filter -->
-                    <!-- <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
-                        <a href="#nk-toggle-filter">
-                            <span class="nk-icon-squares"></span>
-                        </a>
-                    </div> -->
                     <!-- END: Filter -->
                     <div id="app">
-                      <!-- <div class="nk-blog-isotope nk-isotope nk-isotope-gap nk-isotope-1-cols"> -->
                       <div v-for="contenido in contenidos">
                         <div class="miContenido">
                         <!-- START: Post -->
+
                         <div class="nk-isotope-item">
                             <div class="nk-blog-post">
                                 <div class="nk-post-thumb">
-                                    <a href="post-single.html">
-                                        <img src="assets/images/post-1-mid.jpg" alt="" class="nk-img-stretch">
+                                    <a :href="'/singlePost/' + contenido.id">
+                                        <img :src="'http://dajiffy.test:8000/vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content" alt="" class="nk-img-stretch">
                                     </a>
                                     <div class="nk-post-category"><button class="btn btn-primary">Like</button></div>
                                     <div class="nk-post-category"><button class="btn btn-primary" @click="deletePost(contenido)">Delete</button></div>
@@ -203,7 +189,7 @@
         </div>
         <!-- END: Pagination -->
 
-
+      </div>
 
         <!--
     START: Footer
@@ -231,8 +217,6 @@
         <!-- END: Footer -->
 
 
-    </div>
-
 
     <!-- START: Scripts -->
 
@@ -244,6 +228,7 @@
           el: '#app',
           data: {
             contenidos: [],
+            usuario: "",
             welcome: "hola"
           },
           created(){
@@ -264,20 +249,15 @@
                 })
               console.log(post);
             },
-            logOut: function() {
-                console.log("loginOut");
-                axios.post("/logout").
-                then(function(response) {
-
-                    window.location.replace("/login");
-                })
-                .catch(function(error) {
-                    //console.log(error);
-                    });
-                }
+            logOut(){
+              axios.post("/vueLogOut")
+              .then(function(response) {
+                window.location.replace("/login1");
+              })
             }
-        });
-    });
+        }
+    })
+  });
     </script>
 
     <!-- END: Scripts -->

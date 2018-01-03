@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Redirect;
+
 use App\ContentModel;
 
 use DB;
@@ -17,7 +19,7 @@ class ContentController extends Controller
     {
       $imagen = $request['imagen'];
       $contenido = $request['contenido'];
-      //$content = new ContentModel();
+      //$content = new ContentModel();|
       $usuario = Auth::user();
       //$path = " ";
       try{
@@ -72,7 +74,7 @@ class ContentController extends Controller
             $id = Auth::user()->id;
             $content = new ContentModel();
             //$content = DB::table('content')->where('idUsuario', '=', $id )->get();
-            $content = ContentModel::where('idUsuario','=',$id)->get();
+            $content = ContentModel::where('idUsuario','=',$id)->with('user')->get();
             return response()->json(['contenidos'=> $content]);
             //return $idUsuarioLogeado;
 
@@ -81,14 +83,56 @@ class ContentController extends Controller
         }
     }
 
-    public function deletePost($id)
+    public function loadSinglePost($id)
     {
-        $content = ContentModel::where('id', '=', $id)->first();
-        $content->delete();
+        try{
+            $content = ContentModel::where('id','=',$id)->with('user')->first();
+            return response()->json(['contenido'=> $content]);
+
+        }catch(\Illuminate\Database\QueryException $e){
+            dd($e->getMessage());
+        }
     }
 
+    public function getContentImage($userName, $name)
+    {
+        $storagePath = public_path("uploads/Usuarios/". $userName  . "/contentsUser/" . $name);
+        return Image::make($storagePath)->response();
+    }
+
+    public function getProfileImage($userName, $name)
+    {
+        $storagePath = public_path("uploads/Usuarios/". $userName  . "/profileImages/" . $name);
+        return Image::make($storagePath)->response();
+    }
+
+    public function deletePost($id)
+    {
+      try{
+        $content = ContentModel::where('id', '=', $id)->first();
+        $content->delete();
+        return response()->json(['Mensaje'=> 'Eliminado']);
+        //return view('Home');
+
+    }catch(\Illuminate\Database\QueryException $e){
+        dd($e->getMessage());
+        return response()->json(['Mensaje'=> 'Error al eliminar','Error'=>$e]);
+    }
+    }
     public function editPost(Request $request)
     {
+      try{
+          $contenido = $request['contenido'];
+          $content = ContentModel::where('id','=',$contenido['id'])->first();
+          $content->titulo = $contenido['titulo'];
+          $content->descripcionContenido = $contenido['descripcionContenido'];
+          $content->update();
+          return response()->json(['Mensaje'=> 'Editado', 'contenido'=> $contenido]);
+
+      }catch(\Illuminate\Database\QueryException $e){
+          dd($e->getMessage());
+          return response()->json(['Mensaje'=> 'Error al editar','Error'=>$e]);
+      }
         /*
     	$content = new ContentModel();
 		$input = Request::only('titulo','descripcionContenido');

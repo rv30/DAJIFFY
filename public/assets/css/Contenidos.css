@@ -1,0 +1,40 @@
+.Post{
+
+    background-repeat: no-repeat;
+    background-position: auto center;
+    background-size: 100%;
+
+    background-color: gray;
+    background-repeat: round;
+    display: -webkit-inline-box;
+    height: 300px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    text-align: center;
+    width: 300px;
+
+}
+.Post:hover .PostInfo{
+    margin-top: -100%;
+}
+.PostInfo{
+    background-color: rgba(251, 251, 251, 0.7);
+    font-variant: small-caps;
+    height: 100%;
+    margin-top: 0%;
+    width: 100%;
+    -webkit-transition: margin-top 0.4s ease-in-out;
+}
+
+.PostInfo h3{
+    font-size: 35px;
+    margin-top: 25%;
+}
+.PostInfo h4{
+    font-size: 28px;
+}
+
+.imagenContenido{
+    height: 300px;
+    width: 300px;
+}

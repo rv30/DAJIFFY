@@ -14,8 +14,8 @@ class ContentModel extends Model
     protected $fillable=['id','content','tipo','visible','titulo','descripcionContenido','activo','idUsuario'
 	];
 
-	public function userFor()
+	public function user()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->belongsTo(User::class, 'idUsuario');
     }
 }

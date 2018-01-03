@@ -54,10 +54,10 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="home.html">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li class="active">
-                            <a href="profile.html">Profile</a>
+                            <a href="/profile/{{Auth::user()->id}}">{{ Auth::user()->userName }}</a>
                         </li>
                     </ul>
 
@@ -139,7 +139,8 @@
     <div class="nk-main">
 
         <!-- START: Header Title -->
-        <div class="nk-header-title nk-header-title-lg">
+
+        <!-- <div class="nk-header-title nk-header-title-lg">
             <div class="bg-image">
                 <div style="background-image: url('assets/images/post-6.jpg');"></div>
 
@@ -155,7 +156,7 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
         <!-- END: Header Title -->
 
@@ -176,7 +177,7 @@
                             <div class="nk-gap-1"></div>
 
                             <input type="file" @change="onFileChange" class="form-control required" name="content" >
-                            <input type="submit" class="nk-btn">Update</input>
+                            <input type="submit" class="nk-btn" value="Update"></input>
                             <button class="nk-btn">Cancel</button>
                         </form>
                     </div>
@@ -222,7 +223,7 @@
         contenido: {
           descripcionContenido:"",
           titulo:""
-        }
+          }
         },
             methods: {
               onFileChange (e) {
@@ -251,7 +252,7 @@
                 }
                 axios.post("/vueUploadContent", data).then(function(response) {
                     console.log(response);
-                    window.location.replace("/profile");
+                    window.location.replace("/home");
                     })
                     .catch(function(error) {
                         console.log(error);
