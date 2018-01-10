@@ -9,5 +9,5 @@ class request extends Model
     protected $table="request";
     protected $id="id";
     protected $primary="id";
-    protected $fillables=['id','estado','idUsuarioSolicitante','idUsuarioResponde'];
+    protected $fillable=['id','estado','idUsuarioSolicitante','idUsuarioResponde'];
 }

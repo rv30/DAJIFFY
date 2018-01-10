@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\UserModel;
 use App\User;
+use Mail;
+use App\Mail\sendEmail;
+
 
 use Auth;
 use DB;
@@ -70,7 +73,9 @@ class UserController extends Controller
       try{
         // $user = DB::table('user')
         // ->where('id', '=', $id)->get();
-        $userProfile = User::where('id','=',$id)->with('contents')->first();
+        $userProfile = User::where('id','=',$id)->with(['contents'=>function($q){
+            $q -> orderBy('created_at','desc')->get();
+        }])->first();
         return response()->json(['usuarioPerfil'=> $userProfile]);
         //return view('Profile', compact('user'));
         //return response()->json(['usuario'=> $user]);
@@ -83,7 +88,6 @@ class UserController extends Controller
     {
         $imagen = $request['imagen'];
         $usuario = $request['usuario'];
-        $user = new User();
         $path = " ";
         $token = $request['token'];
         try{
@@ -121,21 +125,79 @@ class UserController extends Controller
         $usuario['activo'] = 1;
         $usuario['bloqueado'] = 0;
         $usuario['privado'] = 0;
+        
         $user=user::create($usuario);
 
         session(['user'=> $user]);
+        Mail::to($usuario['email'])->send(new sendEmail());
 
         return $request->session()->get('user');
 
+        }catch(Exception $e){
+            return response ()->json(['error'=>$e]);
+        }
+    }
+
+        public function editUser(Request $request)
+    {
+        $imagen = $request['imagen'];
+        $usuario = $request['usuario'];
+        $user = Auth::user();
+       // return response ()->json(['mensaje'=>$user]);
+        $path = " ";
+        try{
+
+        $name = $usuario['nombre'] ." ". $usuario['lastName'];
+        $fecha = $usuario['año'] ."-".$usuario['mes'] ."-".$usuario['dia'];
+
+            if ($imagen != "") {
+            $folder=File::makeDirectory(public_path('uploads/Usuarios/' . $usuario['userName'].'/profileImages'), 0775, true, true);
+                     $exploded=explode(',',$imagen);
+
+                    if (str_contains($exploded[0],'jpeg')) {
+                        $extensionFile="jpg";
+                    }else if(str_contains($exploded[0],'png')){
+
+                        $extensionFile="png";
+                    }else{
+                        $extensionFile="";
+                    }
+
+                    $filename= str_random() .'-'.str_random() .'-'. time() . '.' . $extensionFile;
+                    if ($extensionFile!="")
+                    {
+                    Image::make($exploded[1])->save(public_path('uploads/Usuarios/'. $usuario['userName']. '/profileImages/' . $filename));
+
+                    }
+                    else{
+                        $filename="avatar.jpg";
+                    }
+        }
+
+       // $usuario['avatar'] = $filename;
+        $user -> avatar = $filename;
+        $user -> userName = $usuario['userName'];
+        $user -> nombre = $name;
+        $user -> email = $usuario['email'];
+        $user -> fechaNacimiento = $fecha;
+        $user -> genero = $usuario['genero'];
+        $user -> password = bcrypt($usuario['password']);
+        $user -> tipoUsuario = 'Usuario';
+        $user -> activo = 1;
+        $user -> bloqueado = 0;
+        $user -> privado = 0;
+        $user -> save();
+        return response ()->json(['mensaje'=>$user]);
+
         }catch(\Illuminate\Database\QueryException $e){
-            dd($e->getMessage());
+            return response ()->json(['error'=>$e]);
         }
     }
 
     public function logOut(Request $request)
     {
-		    Auth::logout();
-        return response()->json(['Mensaje'=> 'Sesion Cerrada']);
+		     Auth::logout();
+        return redirect('/');
     }
     /**
      * Show the form for creating a new resource.

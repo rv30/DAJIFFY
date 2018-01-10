@@ -39,7 +39,7 @@
 
 
 <body>
-
+<!-- <div id="app"> -->
 
     <header class="nk-header nk-header-opaque">
         <!--
@@ -55,7 +55,7 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li class="active">
-                            <a href="" @click="logOut()">LogOut</a>
+                            <a href="/vueLogOut">LogOut</a>
                             <!-- <button class="nk-btn" @click="logOut">Log Out</button> -->
                         </li>
                         <li><a href="/profile/{{Auth::user()->id}}">
@@ -141,7 +141,11 @@
     <div class="nk-main">
         <div class="container">
             <div class="row">
-                    <!-- END: Filter -->
+                    <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
+                        <a href="/search">
+                            <span class="nk-icon-squares"></span>
+                        </a>
+                    </div>
                     <div id="app">
                       <div v-for="contenido in contenidos">
                         <div class="miContenido">
@@ -151,14 +155,14 @@
                             <div class="nk-blog-post">
                                 <div class="nk-post-thumb">
                                     <a :href="'/singlePost/' + contenido.id">
-                                        <img :src="'http://dajiffy.test:8000/vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content" alt="" class="nk-img-stretch">
+                                        <img :src="rootUrl+'vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content" alt="" class="nk-img-stretch">
                                     </a>
-                                    <div class="nk-post-category"><button class="btn btn-primary">Like</button></div>
+                                    <div class="nk-post-category"><button @click.prevent="likePost(contenido)" class="btn btn-primary">Like</button></div>
                                     <div class="nk-post-category"><button class="btn btn-primary" @click="deletePost(contenido)">Delete</button></div>
                                 </div>
                                 <h2 class="nk-post-title h4"><a href="blog-single.html">@{{contenido.titulo}}</a></h2>
 
-                                <div class="nk-post-comments-count">14 Likes</div>
+                                <div class="nk-post-comments-count">@{{contenido.likes_count}} Likes</div>
                                 <div class="nk-post-comments-count">2 Comments</div>
 
                                 <div class="nk-post-text">
@@ -229,7 +233,8 @@
           data: {
             contenidos: [],
             usuario: "",
-            welcome: "hola"
+            welcome: "hola",
+            rootUrl: "{{ Config::get('helper.url') }}"
           },
           created(){
             axios.post("/vueContentUserProfile")
@@ -249,10 +254,26 @@
                 })
               console.log(post);
             },
+            likePost(post){
+            console.log(post)
+            var data = {
+                id:post.id
+            }
+            axios.post("/vueLikePost",data)
+            .then(res=>{
+                console.log(res.data)
+                if (res.data.Mensaje=='Si Like') 
+                {
+                    post.likes_count+=1
+                }
+            })
+            console.log(post)
+          },
             logOut(){
               axios.post("/vueLogOut")
               .then(function(response) {
-                window.location.replace("/login1");
+                console.log(response)
+                // window.location.replace("/login1");
               })
             }
         }
@@ -261,6 +282,7 @@
     </script>
 
     <!-- END: Scripts -->
+<!-- </div> -->
 </body>
 
 </html>

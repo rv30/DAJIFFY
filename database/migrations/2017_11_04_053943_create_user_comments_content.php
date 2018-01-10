@@ -21,7 +21,6 @@ class CreateUserCommentsContent extends Migration
             $table->integer('idContenido')->unsigned();
             $table->foreign('idContenido')->references('id')->on('content')->onDelete('cascade');
 
-            $table->date('fechaComentario');
             $table->string('comentario');
             $table->timestamps();
         });

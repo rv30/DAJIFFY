@@ -176,6 +176,7 @@
                             <div class="nk-gap-1"></div>
                             <input type="submit" class="nk-btn" value="Update"></input>
                             <button class="nk-btn">Cancel</button>
+        <button @click.prevent="prueba" class="nk-btn">prueba</button>
                         </form>
                     </div>
                     <!-- END: Post -->
@@ -244,6 +245,12 @@
               this.contenido = res.data.contenido;
               console.log(this.contenido);
               window.location.replace("/singlePost/"+ id);
+            })
+          },
+          prueba(){console.log('hola')
+            axios.post("/CsrfTest")
+            .then(res=>{
+              console.log(res);
             })
           }
         },

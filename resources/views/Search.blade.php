@@ -36,7 +36,6 @@
 
 
 <body>
-<div id="busquedaContenido">
     <header class="nk-header nk-header-opaque">
         <!--
         START: Navbar
@@ -136,7 +135,7 @@
     <div class="nk-main">
 
 
-
+      <div id="busquedaContenido">
         <div class="container">
             <!-- START: Filter -->
             <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
@@ -150,22 +149,12 @@
                     <!-- END: Form -->
                 </div>
             </div>
-            <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
-                <a href="#nk-toggle-filter">
-                    <span class="nk-icon-squares"></span>
-                </a>
-            </div>
-            <ul class="nk-isotope-filter">
-                <li class="active" data-filter="*">Title</li>
-                <li data-filter="Branding">Description</li>
-                <li data-filter="Print">Date</li>
-            </ul>
 
             <!-- END: Filter -->
               <div class="Post" v-for="lista in contenido">
                   <div class="PostInfo">
                     <a :href="'/singlePost/' + lista.id">
-                        <img class="imagenContenido" :src="'http://dajiffy.test:8000/vueGetContentImage/'+ usuario.userName +'/'+ lista.content"/>
+                        <img class="imagenContenido" :src="'http://dajiffy.test:8000/vueGetContentImage/'+ lista.user.userName +'/'+ lista.content"/>
                         <h4>@{{lista.titulo}}</h4>
                         <br>
                         <h3>@{{lista.descripcionContenido}}</h3>
@@ -176,6 +165,7 @@
 
             <div class="nk-gap-4"></div>
         </div>
+      </div>
 
         <!-- START: Pagination -->
         <div class="nk-pagination nk-pagination-center">
@@ -210,7 +200,7 @@
         </footer>
         <!-- END: Footer -->
       </div>
-    </div>
+    
     <!-- START: Scripts -->
 
     <script src="{{ asset('assets/js/combined.js') }}"></script>
@@ -227,14 +217,11 @@
               },
               methods: {
                 searchTitle() {
-                    var busquedaVue = this.busqueda;
-                    console.log(busquedaVue);
-                    axios.get("/vueSearchTitle", busquedaVue)
+                    console.log(this.busqueda);
+                    axios.get("/vueSearchTitle/"+this.busqueda)
                     .then(res=>{
-                      this.contenido = res.data.contenidos;
-                      console.log(this.contenido);
-                      this.usuario = this.contenido.user;
-                      console.log(this.usuario);
+                      console.log(res)
+                      this.contenido = res.data.contenidos
                     })
                   }
                   // searchTitle: function() {

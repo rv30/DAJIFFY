@@ -22,16 +22,20 @@ class SearchController extends Controller
         // return response()->json($content);
     }
 
-		public function searchTitleContents(Request $request)
+		public function searchTitleContents($busqueda)
     {
-			$search = $request['busqueda'];
         try{
-            $content = new ContentModel();
-            $content = ContentModel::where('titulo','LIKE',"%$search%")->with('user')->get();
+            $content = ContentModel::
+            where('titulo','LIKE',"%$busqueda%")
+            ->orWhere('descripcionContenido','LIKE',"%$busqueda%")
+            ->orWhere('created_at','LIKE',"%$busqueda%")
+            ->with('user')
+            ->get();
             return response()->json(['contenidos'=> $content]);
 
         }catch(\Illuminate\Database\QueryException $e){
-            dd($e->getMessage());
+            return response()->json(['error'=> $e]);
+            
         }
     }
 

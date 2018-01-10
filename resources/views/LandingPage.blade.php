@@ -146,7 +146,7 @@
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
                         <li>
-                            <a href="Login.php">Login</a>
+                            <a href="/">Login</a>
                         </li>
                     </ul>
 
@@ -369,13 +369,6 @@
                         console.log(this.token);
                     },
                     registerUser: function() {
-                    //this.usuario.email = document.getElementsByName('email')[0].value;
-                    //this.usuario.pass = document.getElementsByName('pass')[0].value;
-                    //nsole.log(this.usuario);
-                    //this.usuario.profile = document.getElementById('profile').files[0];
-                    //var usuarioVue = this.usuario;
-                    //usuarioVue.profile = document.getElementById('profile').files[0];
-                    //console.log(this.usuario);
                     var data = {
                         usuario:this.usuario,
                         imagen:this.image,
@@ -384,11 +377,7 @@
                     axios.put("/vueRegisterUser", data).
                     then(function(response) {
                         console.log(response);
-                        //user = response;
-                        //var nombre = user.data[0].userName;
-                        //var id = user.data[0].id;
-                        //console.log(response);
-                        window.location.replace("/login");
+                        window.location.replace("/login1");
                     })
                     .catch(function(error) {
                         //console.log(error);

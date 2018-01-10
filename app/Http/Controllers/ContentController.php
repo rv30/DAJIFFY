@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 use App\ContentModel;
+use App\userLikesContent;
+use App\userCommentsContent;
 
 use DB;
 use Auth;
@@ -72,9 +74,9 @@ class ContentController extends Controller
     {
         try{
             $id = Auth::user()->id;
-            $content = new ContentModel();
-            //$content = DB::table('content')->where('idUsuario', '=', $id )->get();
-            $content = ContentModel::where('idUsuario','=',$id)->with('user')->get();
+            $content = ContentModel::where('idUsuario','=',$id)
+            ->withCount('likes')
+            ->with('user')->orderBy('created_at','desc')->get();
             return response()->json(['contenidos'=> $content]);
             //return $idUsuarioLogeado;
 
@@ -86,8 +88,12 @@ class ContentController extends Controller
     public function loadSinglePost($id)
     {
         try{
-            $content = ContentModel::where('id','=',$id)->with('user')->first();
-            return response()->json(['contenido'=> $content]);
+            $content = ContentModel::where('id','=',$id)->with('user')
+            ->with(['comments'=>function($q){
+              $q -> with('user')->get();
+            }])->first();
+            $count = userLikesContent::where('idContenido','=',$id)->count();
+            return response()->json(['contenido'=> $content, 'countLikes'=> $count]);
 
         }catch(\Illuminate\Database\QueryException $e){
             dd($e->getMessage());
@@ -133,26 +139,49 @@ class ContentController extends Controller
           dd($e->getMessage());
           return response()->json(['Mensaje'=> 'Error al editar','Error'=>$e]);
       }
-        /*
-    	$content = new ContentModel();
-		$input = Request::only('titulo','descripcionContenido');
+    }
+    public function likePost(Request $request)
+    {
+      $idContenido = $request['id'];
+      $id = Auth::user()->id;
+      $userLikesContent = userLikesContent::where('idUsuario','=',$id)->where('idContenido','=',$idContenido)->first();
 
-    	$title = $input['titulo'];
-        $description = $input['descripcionContenido'];
+      if ($userLikesContent) {
 
-	        try{
-		        DB::table('content')
-	            ->where('idContenido', $_SESSION['idContenido'])->update([
-	            ['titulo' => $title],
-		    	['descripcionContenido' => $description]
-	        ]);
+        return response()->json(['Mensaje'=> 'No Like']);
 
-    	return Redirect::to('index');
+      }else{
 
-    	}catch(\Illuminate\Database\QueryException $e){
-            dd($e->getMessage());
+        try {
+              userLikesContent::create([
+                "idUsuario"=>$id,
+                "idContenido"=>$idContenido
+              ]);
+              return response()->json(['Mensaje'=> 'Si Like']);
+          
+        } catch (Exception $e) {
+          return response()->json(['error'=> $e]);
         }
-        */
+
+      }
+    }
+    public function commentPost(Request $request)
+    {
+      $idContenido = $request['id'];
+      $id = Auth::user()->id;
+      $comentario = $request['comment'];
+
+      try {
+              userCommentsContent::create([
+                "idUsuario"=>$id,
+                "idContenido"=>$idContenido,
+                "comentario"=>$comentario
+              ]);          
+        } catch (Exception $e) {
+          return response()->json(['error'=> $e]);
+        }
+
+      return response()->json(['Mensaje'=> 'success']);
     }
 
 }

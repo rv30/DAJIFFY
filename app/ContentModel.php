@@ -18,4 +18,13 @@ class ContentModel extends Model
     {
         return $this->belongsTo(User::class, 'idUsuario');
     }
+
+    public function likes()
+    {
+    	return $this->hasMany(userLikesContent::class,'idContenido');
+    }
+    public function comments()
+    {
+        return $this->hasMany(userCommentsContent::class,'idContenido');
+    }
 }

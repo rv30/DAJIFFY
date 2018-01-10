@@ -158,7 +158,7 @@
                                     <div class="nk-comment">
                                         <div class="nk-comment-avatar">
                                             <a href="#">
-                                                <img :src="'http://dajiffy.test:8000/vueGetProfileImage/'+ usuario.userName +'/'+ usuario.avatar">
+                                                <img :src="rootUrl+'vueGetProfileImage/'+ usuario.userName +'/'+ usuario.avatar">
                                             </a>
                                         </div>
                                         <div class="nk-comment-meta">
@@ -185,7 +185,7 @@
             <div class="Post" v-for="lista in contenido">
                 <div class="PostInfo">
                   <a :href="'/singlePost/' + lista.id">
-                      <img class="imagenContenido" :src="'http://dajiffy.test:8000/vueGetContentImage/'+ usuario.userName +'/'+ lista.content"/>
+                      <img class="imagenContenido" :src="rootUrl+'vueGetContentImage/'+ usuario.userName +'/'+ lista.content"/>
                       <h4>@{{lista.titulo}}</h4>
                       <br>
                       <h3>@{{lista.descripcionContenido}}</h3>
@@ -263,7 +263,8 @@
     el: "#infoPerfil",
     data: {
         usuario: null,
-        contenido: []
+        contenido: [],
+        rootUrl: "{{ Config::get('helper.url') }}"
         },
         methods: {
           getTime(fecha) {

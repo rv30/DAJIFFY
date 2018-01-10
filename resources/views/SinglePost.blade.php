@@ -141,7 +141,7 @@
             <div class="bg-image">
                 <!-- <div style="background-image: url('uploads/Usuarios/adasdas/contentUser/boi)'"></div> -->
                 <!-- <h1 value="{{ Request::url() }}"></h1> -->
-                <img :src="'http://dajiffy.test:8000/vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content">
+                <img :src="rootUrl+'vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content">
             </div>
             <div class="nk-header-table">
                 <div class="nk-header-table-cell">
@@ -170,11 +170,11 @@
 
                       <h1 class="display-4" v-if="contenido != null">@{{contenido.titulo}}</h1>
                         <div class="nk-post-meta">
-                            <div class="nk-post-comments-count">14 Likes</div>
+                            <div class="nk-post-comments-count">@{{countLikes}} Likes</div>
                             <div class="nk-post-comments-count">2 Comments</div>
-                            <div class="nk-post-category"><a href="#">Like</a></div>
+                            <div class="nk-post-category" @click.prevent="likePost(contenido)"><a href="#">Like</a></div>
                             <div class="nk-post-category"><a href="#">Report</a></div>
-                            <div class="nk-post-category"><a :href="'http://dajiffy.test:8000/editPost/' + contenido.id">Edit</a></div>
+                            <div class="nk-post-category"><a :href="rootUrl+'editPost/' + contenido.id">Edit</a></div>
                             <!-- <div class="nk-post-category"><a :href="'http://dajiffy.test:8000/vueDeleteContent/' + contenido.id">Delete</a></div> -->
                             <div class="nk-post-category"><a href="" @click="deletePost(contenido.id)">Delete</a></div>
                         </div>
@@ -188,19 +188,9 @@
                         <div class="nk-post-meta"  v-if="contenido != null">
                             <div class="nk-post-date">@{{getTime(contenido.created_at)}}</div>
                         </div>
-
-                        <!-- START: Post Share -->
-                        <div class="nk-post-share">
-                            <strong>Share:</strong>
-                            <a href="#" title="Share page on Facebook" data-share="facebook">Facebook</a>,
-                            <a href="#" title="Share page on Twitter" data-share="twitter">Twitter</a>,
-                            <a href="#" title="Share page on Pinterest" data-share="pinterest">Pinterest</a>
-                        </div>
-                        <!-- END: Post Share -->
                     </div>
                     <!-- END: Post -->
 
-                    <div class="nk-gap-1"></div>
                 </div>
             </div>
         </div>
@@ -214,11 +204,11 @@
                         <h3 class="nk-title">Leave a Comment:</h3>
                         <form action="#" class="nk-form">
                             <div class="nk-gap-1"></div>
-                            <textarea class="form-control required" name="message" rows="8" placeholder="Your Comment" aria-required="true"></textarea>
+                            <textarea  v-model="comment" class="form-control required" name="message" rows="8" placeholder="Your Comment" aria-required="true"></textarea>
                             <div class="nk-gap-1"></div>
                             <div class="nk-form-response-success"></div>
                             <div class="nk-form-response-error"></div>
-                            <button class="nk-btn">Post a Comment</button>
+                            <button @click.prevent="commentPost" class="nk-btn">Post a Comment</button>
                         </form>
                     </div>
                 </div>
@@ -238,55 +228,18 @@
                         <div class="nk-gap-1"></div>
 
                         <!-- START: Comment -->
-                        <div class="nk-comment">
+                        <div class="nk-comment" v-for="comentario in contenido.comments">
                             <div class="nk-comment-avatar">
                                 <a href="#">
-                                    <img src="{{ asset('assets/images/avatar-1.jpg') }}" alt="">
+                                    <img :src="rootUrl+'vueGetProfileImage/'+ comentario.user.userName +'/'+ comentario.user.avatar" alt="">
                                 </a>
                             </div>
                             <div class="nk-comment-meta">
-                                <div class="nk-comment-name"><a href="#">John Leonard</a></div>
-                                <div class="nk-comment-reply"><a href="#">Reply</a></div>
-                                <div class="nk-comment-date">20 September, 2016</div>
+                                <div class="nk-comment-name"><a href="#">@{{comentario.user.userName}}</a></div>
+                                <div class="nk-comment-date">@{{getTime(comentario.created_at)}}</div>
                             </div>
                             <div class="nk-comment-text">
-                                <p>Nullam ac dui et purus malesuada gravida id fermentum orci. In eu ipsum quis urna hendrerit condimentum vitae a mauris. In congue turpis purus, vitae tempus ante id. Donec orci arcu, sagittis ut finibus vitae.</p>
-                            </div>
-
-                            <!-- START: Comment -->
-                            <div class="nk-comment">
-                                <div class="nk-comment-avatar">
-                                    <a href="#">
-                                        <img src="{{ asset('assets/images/avatar-2.jpg') }}" alt="">
-                                    </a>
-                                </div>
-                                <div class="nk-comment-meta">
-                                    <div class="nk-comment-name"><a href="#">Jody Parker</a></div>
-                                    <div class="nk-comment-reply"><a href="#">Reply</a></div>
-                                    <div class="nk-comment-date">20 September, 2016</div>
-                                </div>
-                                <div class="nk-comment-text">
-                                    <p>Aenean eget varius augue, nec gravida lectus. Pellentesque in imperdiet us, ac efficitur risus. Etiam laoreet dapibus lorem vitae aliquam. Sed elementum ligula, molestie consectetur massa rhoncus at.</p>
-                                </div>
-                            </div>
-                            <!-- END: Comment -->
-                        </div>
-                        <!-- END: Comment -->
-
-                        <!-- START: Comment -->
-                        <div class="nk-comment">
-                            <div class="nk-comment-avatar">
-                                <a href="#">
-                                    <img src="{{ asset('assets/images/avatar-3.jpg') }}" alt="">
-                                </a>
-                            </div>
-                            <div class="nk-comment-meta">
-                                <div class="nk-comment-name"><a href="#">Katie Anderson</a></div>
-                                <div class="nk-comment-reply"><a href="#">Reply</a></div>
-                                <div class="nk-comment-date">21 September, 2016</div>
-                            </div>
-                            <div class="nk-comment-text">
-                                <p>To set. Lights likeness after, stars void in doesn't subdue.</p>
+                                <p>@{{comentario.comentario}}</p>
                             </div>
                         </div>
                         <!-- END: Comment -->
@@ -354,6 +307,9 @@
     el: "#infoContenido",
     data: {
         contenido: null,
+        countLikes: 0,
+        comment:'',
+        rootUrl: "{{ Config::get('helper.url') }}"
         },
         methods: {
           getTime(fecha) {
@@ -367,15 +323,38 @@
             .then(res=>{
               window.location.replace("/home");
             })
+          },
+          likePost(post){
+            console.log(post)
+            var data = {
+                id:post.id
+            }
+            axios.post("/vueLikePost",data)
+            .then(res=>{
+                console.log(res)
+            })
+            console.log(post)
+          },
+          commentPost(){
+            var data = {
+                id:this.contenido.id,
+                comment:this.comment
+            }
+            axios.post("/vueCommentPost",data)
+            .then(res=>{
+                console.log(res)
+            })
           }
         },
         mounted(){
+            console.log(this.rootUrl)
           var url = window.location.href;
           var res = url.split('/');
           var id = res[4];
           axios.post("/vueLoadSinglePost/"+ id)
           .then(res=>{
             this.contenido = res.data.contenido;
+            this.countLikes = res.data.countLikes;
             console.log(this.contenido);
           })
         }

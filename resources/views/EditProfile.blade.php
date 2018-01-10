@@ -53,12 +53,13 @@
                     </a>
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
-                        <li>
-                            <a href="home.html">Home</a>
-                        </li>
                         <li class="active">
-                            <a href="profile.html">Profile</a>
+                            <a href="" @click="logOut()">LogOut</a>
+                            <!-- <button class="nk-btn" @click="logOut">Log Out</button> -->
                         </li>
+                        <li><a href="/profile/{{Auth::user()->id}}">
+                            {{ Auth::user()->userName }}
+                        </a></li>
                     </ul>
 
                     <ul class="nk-nav nk-nav-right nk-nav-icons">
@@ -147,23 +148,24 @@
                 </div>
                 <div class="col-lg-12">
                     <!-- START: Form -->
-                    <form action="#" class="nk-form nk-form-ajax">
+<div id="editarPerfil">
+                    <form class="nk-form nk-form-ajax" v-on:submit.prevent="editUser" method="post" enctype="multipart/form-data">
                         <div class="row vertical-gap">
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" name="username" placeholder="Your User Name">
+                                <input type="text" class="form-control required" name="username" v-model="usuario.userName" placeholder="Your User Name">
                             </div>
                             <div class="col-md-6">
-                                <input type="file" class="form-control" name="avatar" placeholder="Your Avatar">
+                                <input type="file" class="form-control" name="avatar" @change="onFileChange" placeholder="Your Avatar">
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" name="name" placeholder="Your Name">
+                                <input type="text" class="form-control required" v-model="usuario.nombre" name="name" placeholder="Your Name">
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" name="lastname" placeholder="Last Name">
+                                <input type="text" class="form-control required" name="lastname" v-model="usuario.lastName" placeholder="Last Name">
                             </div>
                             <div class='col-sm-6'>
                             <label>Birth Date: </label>
-                                <select name="Day" value="12">
+                                <select name="Day" value="12" v-model="usuario.dia">
                                     <option value = "" disabled="disabled" selected="selected" hidden="hidden">Day</option>
                                     <option value = "1">1</option>
                                     <option value = "2">2</option>
@@ -198,7 +200,7 @@
                                     <option value = "31">31</option>
                                 </select>
                                 
-                                 <select name="Month" value="02">
+                                 <select name="Month" value="02" v-model="usuario.mes">
                                     <option value = "" disabled="disabled" selected="selected" hidden="hidden">Month</option>
                                     <option value = "01">January</option>
                                     <option value = "02">February</option>
@@ -214,7 +216,7 @@
                                     <option value = "12">Dicember</option>
                                 </select>
 
-                                <select name="Year" value="02">
+                                <select name="Year" value="02" v-model="usuario.año">
                                     <option value = "" disabled="disabled" selected="selected" hidden="hidden">Year</option>
                                     <option value = "2006">2006</option>
                                     <option value = "2005">2005</option>
@@ -232,16 +234,16 @@
                             </div>
                             <div class="col-md-6">
                                   <label>Gender:</label>
-                                  <input type="radio" name="gender" value="Male" checked> Male
-                                  <input type="radio" name="gender" value="Female" style=""> Female<br>
+                                  <input type="radio" name="gender" value="1" v-model="usuario.genero" checked> Male
+                                  <input type="radio" name="gender" value="2" v-model="usuario.genero" style=""> Female<br>
                             </div>
                         </div>
                         <div class="nk-gap-1"></div>
-                        <input type="email" class="form-control required" name="email" placeholder="Your Email">
+                        <input type="email" class="form-control required" name="email" v-model="usuario.email" placeholder="Your Email">
                         <div class="nk-gap-1"></div>
                         <div class="row vertical-gap">
                             <div class="col-md-6">
-                                <input type="password" class="form-control required" name="password" placeholder="Your Password">
+                                <input type="password" class="form-control required" name="password" v-model="usuario.password" placeholder="Your Password">
                             </div>
                             <div class="col-md-6">
                                 <input type="password" class="form-control required" name="password2" placeholder="Confirm Password">
@@ -250,9 +252,10 @@
                         <div class="nk-gap-1"></div>
                         <div class="nk-form-response-success"></div>
                         <div class="nk-form-response-error"></div>
-                        <button class="nk-btn">Update</button>
+                        <button type="submit" class="nk-btn" >Update</button>
                         <button class="nk-btn">Cancel</button>
                     </form>
+</div>
                     <!-- END: Form -->
                 </div>
             </div>
@@ -260,8 +263,53 @@
         </div>
         <!-- END: Contact Info -->
 
+ <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new Vue({
+              el: '#editarPerfil',
+              data: {
+                image: null,
+                usuario: {"userName": "", "avatar": "", "nombre": "", "lastName": "", "dia": "", "año": "", "mes": "", "genero": "", "email": "", "password": ""},
+                token: ""
+              },
+              methods: {
+                    onFileChange (e) {
+                      var fileReader = new FileReader()
+                      if (e.target.files[0].type === 'image/jpeg' || e.target.files[0].type === 'image/png') {
+                        const files = e.target.files || e.dataTransfer.files
+                        fileReader.readAsDataURL(e.target.files[0])
+                        fileReader.onload = (e) => {
+                          this.filename = [...files].map(file => file.name).join(', ')
+                          this.image = e.target.result
 
+                        }
+                      } else {
+                        console.log('archivo no permitido')
+                      }
+                    },
+                    showToken(){
 
+                      var t = document.getElementById('mitoken');
+                      this.token = t.getAttribute("content");
+                        console.log(this.token);
+                    },
+                    editUser: function() {
+                    var data = {
+                        usuario:this.usuario,
+                        imagen:this.image
+                    }
+                    axios.put("/vueEditProfile", data).
+                    then(function(response) {
+                        console.log(response);
+                        //window.location.replace("/login");
+                    })
+                    .catch(function(error) {
+                        });
+                    }
+                }
+            });
+        });
+    </script>
 
         <!--
     START: Footer

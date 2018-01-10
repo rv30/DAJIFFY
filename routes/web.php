@@ -25,8 +25,18 @@ Route::resource('User','UserController');
 
 Route::group(['middleware'=>'auth:api'], function(){
     Route::post('/prueba',function(){
-        return view('AdminPage');
+        return view('AdminPage');   
     });
+});
+
+Route::group(['middleware'=>'VerifyCsrfToken'], function(){
+    Route::post('/CsrfTest',function(){
+        return view('AdminPage');   
+    });
+});
+
+Route::get('email', function () {
+    return view('Email');
 });
 
 Route::get('home', function () {
@@ -125,7 +135,9 @@ Route::put("/vueRegisterUser","UserController@registerUser");
 
 Route::get("/vueLoadProfile/{id}", "UserController@loadProfile");
 
-Route::post("/vueLogOut","UserController@logOut");
+Route::put("/vueEditProfile","UserController@editUser");
+
+Route::get("/vueLogOut","UserController@logOut");
 
 Route::get("/vueGetProfileImage/{userName}/{name}","ContentController@getProfileImage");
 
@@ -147,11 +159,15 @@ Route::get("/vueGetContentImage/{userName}/{name}","ContentController@getContent
 
 Route::post("/vueSearchContent","SearchController@searchContent");
 
-Route::get("/vueSearchTitle","SearchController@searchTitleContents");
+Route::get("/vueSearchTitle/{busqueda}","SearchController@searchTitleContents");
 
 Route::post("/vueSearchDesc","SearchController@searchDescriptionContents");
 
 Route::post("/vueSearchDate","SearchController@searchDateContents");
+
+Route::post("/vueLikePost","ContentController@likePost");
+
+Route::post("/vueCommentPost","ContentController@commentPost");
 
 //Route::post('indexPrueba','User@login');
 
