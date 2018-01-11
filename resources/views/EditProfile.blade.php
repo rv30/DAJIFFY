@@ -14,7 +14,7 @@
     <meta name="keywords" content="portfolio, clean, minimal, blog, template, portfolio website">
     <meta name="author" content="nK">
 
-    <link rel="icon" type="image/png" href="assets/images/icon-dajiffy.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/icon-dajiffy.png') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -22,14 +22,52 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i%7cWork+Sans:400,500,700" rel="stylesheet" type="text/css">
-    
-    <link rel="stylesheet" href="assets/css/combined.css">
 
-    <script type="text/javascript" src="js/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
-    <script type="text/javascript" src="js/axios.js"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/combined.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/Contenidos.css') }}">
+
+    <script type="text/javascript" src="{{ asset('js/vue.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('js/axios.js') }}"></script>
 
     <!-- END: Styles -->
+
+    <script type="text/javascript">
+        function validateLogin()
+        {
+            //Campos requeridos
+            //alert(document.getElementById("nomb").value);
+            var name = document.getElementById("nomb").value;
+            var lastname = document.getElementById("last").value;
+            var email = document.getElementById("emai").value;
+            var password = document.getElementById("pass1").value;
+            //alert(password);
+            var password2 = document.getElementById("pass2").value;
+            //
+
+            if (name == "") {
+                alert("You must be filled out your Name");
+                return false;
+            }
+            if (lastname == "") {
+                alert("You must be filled out you Last Name");
+                return false;
+            }
+            if (email == "") {
+                alert("Name must be filled your Email");
+                return false;
+            }
+            if (password != "") {
+                if (password2 != password) {
+                    alert("Password must be the same");
+                    return false;
+                }
+            }
+        }
+    </script>
 
 
 
@@ -47,16 +85,12 @@
         <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-header-opaque">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="index.html" class="nk-nav-logo">
-                        <img src="assets/images/logo-light-PNG-dajiffy.png" alt="" width="85" class="nk-nav-logo-onscroll">
-                        <img src="assets/images/logo-dark-PNG-dajiffy.png" alt="" width="85">
+                    <a href="/home" class="nk-nav-logo">
+                        <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
+                        <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
 
                     <ul class="nk-nav nk-nav-right hidden-md-down" data-nav-mobile="#nk-nav-mobile">
-                        <li class="active">
-                            <a href="" @click="logOut()">LogOut</a>
-                            <!-- <button class="nk-btn" @click="logOut">Log Out</button> -->
-                        </li>
                         <li><a href="/profile/{{Auth::user()->id}}">
                             {{ Auth::user()->userName }}
                         </a></li>
@@ -97,7 +131,7 @@
 
                         <div class="nk-nav-logo">
                             <a href="index.html" class="nk-nav-logo">
-                                <img src="assets/images/logo-light.svg" alt="" width="85">
+                                <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85">
                             </a>
                         </div>
 
@@ -149,19 +183,20 @@
                 <div class="col-lg-12">
                     <!-- START: Form -->
 <div id="editarPerfil">
-                    <form class="nk-form nk-form-ajax" v-on:submit.prevent="editUser" method="post" enctype="multipart/form-data">
+                    <form class="nk-form nk-form-ajax" v-on:submit.prevent="editUser" method="post" enctype="multipart/form-data" name="LoginForm" onsubmit="return validateLogin()">
+
                         <div class="row vertical-gap">
-                            <div class="col-md-6">
+                            <!--<div class="col-md-6">
                                 <input type="text" class="form-control required" name="username" v-model="usuario.userName" placeholder="Your User Name">
-                            </div>
-                            <div class="col-md-6">
+                            </div>-->
+                            <div class="col-md-12">
                                 <input type="file" class="form-control" name="avatar" @change="onFileChange" placeholder="Your Avatar">
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" v-model="usuario.nombre" name="name" placeholder="Your Name">
+                                <input type="text" id="nomb" class="form-control required" v-model="usuario.nombre" name="name" placeholder="Your Name">
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control required" name="lastname" v-model="usuario.lastName" placeholder="Last Name">
+                                <input type="text"  id="last" class="form-control required" name="lastname" v-model="usuario.lastName" placeholder="Last Name">
                             </div>
                             <div class='col-sm-6'>
                             <label>Birth Date: </label>
@@ -199,7 +234,7 @@
                                     <option value = "30">30</option>
                                     <option value = "31">31</option>
                                 </select>
-                                
+
                                  <select name="Month" value="02" v-model="usuario.mes">
                                     <option value = "" disabled="disabled" selected="selected" hidden="hidden">Month</option>
                                     <option value = "01">January</option>
@@ -239,21 +274,21 @@
                             </div>
                         </div>
                         <div class="nk-gap-1"></div>
-                        <input type="email" class="form-control required" name="email" v-model="usuario.email" placeholder="Your Email">
+                        <input type="email" id="emai" class="form-control required" name="email" v-model="usuario.email" placeholder="Your Email">
                         <div class="nk-gap-1"></div>
                         <div class="row vertical-gap">
                             <div class="col-md-6">
-                                <input type="password" class="form-control required" name="password" v-model="usuario.password" placeholder="Your Password">
+                                <input type="password" id="pass1" class="form-control required" name="password" v-model="usuario.password" placeholder="Your Password">
                             </div>
                             <div class="col-md-6">
-                                <input type="password" class="form-control required" name="password2" placeholder="Confirm Password">
+                                <input type="password" id="pass2" class="form-control required" name="password2" placeholder="Confirm Password">
                             </div>
                         </div>
                         <div class="nk-gap-1"></div>
                         <div class="nk-form-response-success"></div>
                         <div class="nk-form-response-error"></div>
                         <button type="submit" class="nk-btn" >Update</button>
-                        <button class="nk-btn">Cancel</button>
+                        <a href="/profile/{{Auth::user()->id}}" class="nk-btn">Cancel</a>
                     </form>
 </div>
                     <!-- END: Form -->
@@ -301,12 +336,49 @@
                     axios.put("/vueEditProfile", data).
                     then(function(response) {
                         console.log(response);
-                        //window.location.replace("/login");
+                        window.location.replace("/home");
                     })
                     .catch(function(error) {
                         });
                     }
-                }
+                },
+                mounted(){
+                  var url = window.location.href;
+                  var res = url.split('/');
+                  var id = res[4];
+                  axios.get("/vueLoadProfile/"+ id)
+                  .then(res=>{
+                    var nom = res.data.usuarioPerfil.nombre.split(' ');
+                    var fec = res.data.usuarioPerfil.fechaNacimiento.split('-');
+                    this.usuario.nombre = nom[0];
+                    document.getElementById("nomb").value = this.usuario.nombre;
+                    //console.log(document.getElementById("nomb").value);
+                    this.usuario.lastName = nom[1];
+                    document.getElementById("last").value = this.usuario.lastName;
+                    this.usuario.año = fec[0];
+                    this.usuario.mes = fec[1];
+                    this.usuario.dia = fec[2];
+                    if(fec[2] == 01){this.usuario.dia = 1}
+                    if(fec[2] == 02){this.usuario.dia = 2}
+                    if(fec[2] == 03){this.usuario.dia = 3}
+                    if(fec[2] == 04){this.usuario.dia = 4}
+                    if(fec[2] == 05){this.usuario.dia = 5}
+                    if(fec[2] == 06){this.usuario.dia = 6}
+                    if(fec[2] == 07){this.usuario.dia = 7}
+                    if(fec[2] == 08){this.usuario.dia = 8}
+                    if(fec[2] == 09){this.usuario.dia = 9}    
+                    var gen = res.data.usuarioPerfil.genero;
+                    if(gen == 'masculino'){this.usuario.genero = 1}
+                    if(gen == 'femenino'){this.usuario.genero = 2}
+                    this.usuario.email = res.data.usuarioPerfil.email;
+                    document.getElementById("emai").value = this.usuario.email;
+                    document.getElementById("pass1").value = this.usuario.password;
+                    //document.getElementById("pass2").value = this.usuario.password;
+
+                    //this.usuario.nombre = res.data.usuarioPerfil.nombre;
+                    //console.log(fec[2]);
+          })
+        }
             });
         });
     </script>
@@ -319,10 +391,9 @@
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
 
@@ -342,9 +413,9 @@
 
     <!-- START: Scripts -->
 
-    <script src="assets/js/combined.js"></script>
+    <script src="{{ asset('assets/js/combined.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    
+
     <!-- END: Scripts -->
 
 

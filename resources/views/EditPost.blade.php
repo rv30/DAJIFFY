@@ -31,6 +31,31 @@
 
     <!-- END: Styles -->
 
+    <script type="text/javascript">
+        function validateLogin()
+        {
+            //Campos requeridos
+            var titulo = document.forms["LoginForm"]["NewTitle"].value;
+            var descripcion = document.forms["LoginForm"]["message"].value;
+            var avatar = document.forms["LoginForm"]["content"].value;
+            //
+
+            if (titulo == "") {
+                alert("You must be filled out Title");
+                return false;
+            }
+            if (descripcion == "") {
+                alert("You must be filled out Description");
+                return false;
+            }
+            if (avatar == "") {
+                alert("You must select a profile picture");
+                return false;
+            }
+            
+        }
+    </script>
+
 
 </head>
 
@@ -47,7 +72,7 @@
         <nav class="nk-navbar nk-navbar-top">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                       <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
                       <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
@@ -168,15 +193,15 @@
                     <div class="nk-gap-1"></div>
                     <!-- START: Post -->
                     <div class="nk-blog-post nk-blog-post-single">
-                        <form v-on:submit.prevent="editPost" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax">
+                        <form v-on:submit.prevent="editPost" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax" name="LoginForm">
                             <div class="nk-gap-1"></div>
                             <input type="text" class="form-control required" v-model="contenido.titulo" name="NewTitle" placeholder="New  Title">
                             <div class="nk-gap-1"></div>
                             <textarea class="form-control required" v-model="contenido.descripcionContenido" name="message" rows="8" placeholder="Your Comment" aria-required="true"></textarea>
                             <div class="nk-gap-1"></div>
                             <input type="submit" class="nk-btn" value="Update"></input>
-                            <button class="nk-btn">Cancel</button>
-        <button @click.prevent="prueba" class="nk-btn">prueba</button>
+                            <a href="/profile/{{Auth::user()->id}}" class="nk-btn">Cancel</a>
+        <!-- <button @click.prevent="prueba" class="nk-btn">prueba</button>-->
                         </form>
                     </div>
                     <!-- END: Post -->
@@ -193,10 +218,9 @@
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
 

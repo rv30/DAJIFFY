@@ -49,7 +49,7 @@
         <nav class="nk-navbar nk-navbar-top">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                         <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
                         <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
@@ -122,10 +122,9 @@
                 <div class="container">
                     <div class="nk-nav-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -171,12 +170,11 @@
                       <h1 class="display-4" v-if="contenido != null">@{{contenido.titulo}}</h1>
                         <div class="nk-post-meta">
                             <div class="nk-post-comments-count">@{{countLikes}} Likes</div>
-                            <div class="nk-post-comments-count">2 Comments</div>
-                            <div class="nk-post-category" @click.prevent="likePost(contenido)"><a href="#">Like</a></div>
-                            <div class="nk-post-category"><a href="#">Report</a></div>
-                            <div class="nk-post-category"><a :href="rootUrl+'editPost/' + contenido.id">Edit</a></div>
+                            <div class="nk-post-comments-count">@{{countComments}} Comments</div>
+                            <div class="nk-post-category" @click.prevent="likePost(contenido)"><a href="">Like</a></div>
+                            <div v-if="contenido.idUsuario == {{Auth::user()->id}}" class="nk-post-category"><a :href="rootUrl+'editPost/' + contenido.id">Edit</a></div>
                             <!-- <div class="nk-post-category"><a :href="'http://dajiffy.test:8000/vueDeleteContent/' + contenido.id">Delete</a></div> -->
-                            <div class="nk-post-category"><a href="" @click="deletePost(contenido.id)">Delete</a></div>
+                            <div v-if="contenido.idUsuario == {{Auth::user()->id}}" class="nk-post-category"><a href="" @click="deletePost(contenido.id)">Delete</a></div>
                         </div>
 
                         <!-- START: Post Text -->
@@ -254,11 +252,11 @@
         <div class="nk-pagination nk-pagination-center">
             <div class="container">
                 <a class="nk-pagination-prev" href="#">
-                    <span class="pe-7s-angle-left"></span> Previous Post</a>
+                <!--    <span class="pe-7s-angle-left"></span> Previous Post</a> -->
                 <a class="nk-pagination-center" href="#">
                     <span class="nk-icon-squares"></span>
-                </a>
-                <a class="nk-pagination-next" href="#">Next Post <span class="pe-7s-angle-right"></span> </a>
+        <!--        </a>
+                <a class="nk-pagination-next" href="#">Next Post <span class="pe-7s-angle-right"></span> </a> -->
             </div>
         </div>
         <!-- END: Pagination -->
@@ -275,7 +273,6 @@
                         <ul>
                             <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
                             <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
@@ -308,6 +305,7 @@
     data: {
         contenido: null,
         countLikes: 0,
+        countComments: 0,
         comment:'',
         rootUrl: "{{ Config::get('helper.url') }}"
         },
@@ -336,13 +334,17 @@
             console.log(post)
           },
           commentPost(){
+            var url = window.location.href;
+            var res = url.split('/');
+            var id = res[4];
             var data = {
                 id:this.contenido.id,
                 comment:this.comment
             }
             axios.post("/vueCommentPost",data)
             .then(res=>{
-                console.log(res)
+              window.location.replace("/singlePost/" + id);
+              console.log(res);
             })
           }
         },
@@ -355,6 +357,7 @@
           .then(res=>{
             this.contenido = res.data.contenido;
             this.countLikes = res.data.countLikes;
+            this.countComments = res.data.countComments;
             console.log(this.contenido);
           })
         }

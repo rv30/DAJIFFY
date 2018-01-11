@@ -31,6 +31,25 @@
 
     <!-- END: Styles -->
 
+    <script type="text/javascript">
+        function validateLogin()
+        {
+            //Campos requeridos
+            var email = document.forms["LoginForm"]["email"].value;
+            var pass = document.forms["LoginForm"]["pass"].value;
+            //
+            if (email == "") {
+                alert("You must be filled out your Email");
+                return false;
+            }
+            if (pass == "") {
+                alert("You must be filled out your Password");
+                return false;
+            }
+            
+        }
+    </script>
+
     </head>
 
     <body>
@@ -42,7 +61,7 @@
         <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-transparent">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="" class="nk-nav-logo">
                         <img src="assets/images/logo-light.svg" alt="" width="85" class="nk-nav-logo-onscroll">
                         <img src="assets/images/logoSVG-dajiffy.svg" alt="" width="85">
                     </a>
@@ -147,7 +166,7 @@
                 <div class="col-lg-7">
                     <div class="nk-gap-4"></div>
                     <!-- START: Form -->
-                    <form class="nk-form nk-form-ajax" id="loginFormulario" v-on:submit.prevent="loginUser" method="post" enctype="multipart/form-data">
+                    <form class="nk-form nk-form-ajax" id="loginFormulario" v-on:submit.prevent="loginUser" method="post" enctype="multipart/form-data" name="LoginForm" onsubmit="return validateLogin()">
 
                         <input type="email" class="form-control required" name="email" v-model="usuario.email" placeholder="Email"><br>
                         <input type="password" class="form-control required" name="pass" v-model="usuario.password" placeholder="Password"/>
@@ -176,10 +195,9 @@
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
 
@@ -220,7 +238,7 @@
                     window.location.replace("/home");
                 })
                 .catch(function(error) {
-                    //console.log(error);
+                    alert('User or password invalid');
                     });
                 }
             }

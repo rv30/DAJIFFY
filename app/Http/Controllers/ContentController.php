@@ -70,12 +70,29 @@ class ContentController extends Controller
       }
     }
 
+    public function homeContents(Request $request)
+    {
+        try{
+            //$id = Auth::user()->id;
+            $content = ContentModel::where('activo','=', 1)
+            ->withCount('likes')
+            ->withCount('comments')
+            ->with('user')->orderBy('created_at','desc')->get();
+            return response()->json(['contenidos'=> $content]);
+            //return $idUsuarioLogeado;
+
+        }catch(\Illuminate\Database\QueryException $e){
+            dd($e->getMessage());
+        }
+    }
+
     public function userContents(Request $request)
     {
         try{
             $id = Auth::user()->id;
             $content = ContentModel::where('idUsuario','=',$id)
             ->withCount('likes')
+            ->withCount('comments')
             ->with('user')->orderBy('created_at','desc')->get();
             return response()->json(['contenidos'=> $content]);
             //return $idUsuarioLogeado;
@@ -93,7 +110,8 @@ class ContentController extends Controller
               $q -> with('user')->get();
             }])->first();
             $count = userLikesContent::where('idContenido','=',$id)->count();
-            return response()->json(['contenido'=> $content, 'countLikes'=> $count]);
+            $countC = userCommentsContent::where('idContenido','=',$id)->count();
+            return response()->json(['contenido'=> $content, 'countLikes'=> $count, 'countComments'=> $countC]);
 
         }catch(\Illuminate\Database\QueryException $e){
             dd($e->getMessage());
@@ -158,7 +176,7 @@ class ContentController extends Controller
                 "idContenido"=>$idContenido
               ]);
               return response()->json(['Mensaje'=> 'Si Like']);
-          
+
         } catch (Exception $e) {
           return response()->json(['error'=> $e]);
         }
@@ -176,7 +194,7 @@ class ContentController extends Controller
                 "idUsuario"=>$id,
                 "idContenido"=>$idContenido,
                 "comentario"=>$comentario
-              ]);          
+              ]);
         } catch (Exception $e) {
           return response()->json(['error'=> $e]);
         }

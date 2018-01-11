@@ -13,6 +13,8 @@ use Image;
 
 use App\ContentModel;
 
+use App\User;
+
 class SearchController extends Controller
 {
 
@@ -31,11 +33,17 @@ class SearchController extends Controller
             ->orWhere('created_at','LIKE',"%$busqueda%")
             ->with('user')
             ->get();
-            return response()->json(['contenidos'=> $content]);
+
+						$user = User::
+            where('userName','LIKE',"%$busqueda%")
+            ->orWhere('nombre','LIKE',"%$busqueda%")
+            ->get();
+
+            return response()->json(['contenidos'=> $content, 'usuarios'=> $user]);
 
         }catch(\Illuminate\Database\QueryException $e){
             return response()->json(['error'=> $e]);
-            
+
         }
     }
 

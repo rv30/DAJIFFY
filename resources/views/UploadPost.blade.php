@@ -30,7 +30,30 @@
     <script type="text/javascript" src="js/axios.js"></script>
 
     <!-- END: Styles -->
+    <script type="text/javascript">
+        function validateLogin()
+        {
+            //Campos requeridos
+            var titulo = document.forms["LoginForm"]["NewTitle"].value;
+            var descripcion = document.forms["LoginForm"]["message"].value;
+            var avatar = document.forms["LoginForm"]["content"].value;
+            //
 
+            if (titulo == "") {
+                alert("You must be filled out Title");
+                return false;
+            }
+            if (descripcion == "") {
+                alert("You must be filled out Description");
+                return false;
+            }
+            if (avatar == "") {
+                alert("You must select a profile picture");
+                return false;
+            }
+            
+        }
+    </script>
 
 </head>
 
@@ -47,7 +70,7 @@
         <nav class="nk-navbar nk-navbar-top">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                         <img src="assets/images/logo-light.svg" alt="" width="85" class="nk-nav-logo-onscroll">
                         <img src="assets/images/logoSVG-dajiffy.svg" alt="" width="85">
                     </a>
@@ -123,10 +146,9 @@
                 <div class="container">
                     <div class="nk-nav-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -169,7 +191,7 @@
                     <div class="nk-gap-1"></div>
                     <!-- START: Post -->
                     <div class="nk-blog-post nk-blog-post-single">
-                        <form v-on:submit.prevent="subirContenido" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax">
+                        <form v-on:submit.prevent="subirContenido" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax" name="LoginForm" onsubmit="return validateLogin()">
                             <div class="nk-gap-1"></div>
                             <input type="text" class="form-control required" name="NewTitle" v-model="contenido.titulo" placeholder="New  Title">
                             <div class="nk-gap-1"></div>
@@ -177,8 +199,8 @@
                             <div class="nk-gap-1"></div>
 
                             <input type="file" @change="onFileChange" class="form-control required" name="content" >
-                            <input type="submit" class="nk-btn" value="Update"></input>
-                            <button class="nk-btn">Cancel</button>
+                            <input type="submit" class="nk-btn" value="Upload"></input>
+                            <a href="/home" class="nk-btn">Cancel</a>
                         </form>
                     </div>
                     <!-- END: Post -->
@@ -197,7 +219,6 @@
                         <ul>
                             <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
                             <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>

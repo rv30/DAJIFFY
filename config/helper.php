@@ -1,2 +1,2 @@
 <?php
-return ['url' => 'http://restaurantea.com/public/'];
+return ['url' => 'http://restaurantea.com/'];

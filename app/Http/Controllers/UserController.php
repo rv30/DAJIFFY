@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\UserModel;
+use App\ContentModel;
 use App\User;
 use Mail;
 use App\Mail\sendEmail;
@@ -84,6 +85,17 @@ class UserController extends Controller
       }
     }
 
+    public function postCount($id)
+    {
+      try{
+      $countContents = ContentModel::where('idUsuario','=',$id)->count();
+      return response()->json(['postCount'=> $countContents]);
+
+      }catch(\Illuminate\Database\QueryException $e){
+          dd($e->getMessage());
+      }
+    }
+
     public function registerUser(Request $request)
     {
         $imagen = $request['imagen'];
@@ -93,6 +105,7 @@ class UserController extends Controller
         try{
 
         $name = $request->name ." ". $request->lastName;
+        $fecha = $usuario['año'] ."-".$usuario['mes'] ."-".$usuario['dia'];
 
             if ($imagen != "") {
             $folder=File::makeDirectory(public_path('uploads/Usuarios/' . $usuario['userName'].'/profileImages'), 0775, true, true);
@@ -119,17 +132,18 @@ class UserController extends Controller
         }
 
         $usuario['avatar'] = $filename;
-
+        $usuario['fechaNacimiento'] = $fecha;
         $usuario['password'] = bcrypt($usuario['password']);
         $usuario['tipoUsuario'] = 'Usuario';
         $usuario['activo'] = 1;
         $usuario['bloqueado'] = 0;
         $usuario['privado'] = 0;
-        
+        //$usuario['remember_token'] = $token;
+
         $user=user::create($usuario);
 
         session(['user'=> $user]);
-        Mail::to($usuario['email'])->send(new sendEmail());
+        //Mail::to($usuario['email'])->send(new sendEmail());
 
         return $request->session()->get('user');
 
@@ -166,22 +180,25 @@ class UserController extends Controller
                     $filename= str_random() .'-'.str_random() .'-'. time() . '.' . $extensionFile;
                     if ($extensionFile!="")
                     {
-                    Image::make($exploded[1])->save(public_path('uploads/Usuarios/'. $usuario['userName']. '/profileImages/' . $filename));
+                    Image::make($exploded[1])->save(public_path('uploads/Usuarios/'. $user -> userName. '/profileImages/' . $filename));
 
                     }
                     else{
                         $filename="avatar.jpg";
                     }
+                    $user -> avatar = $filename;
+        }else{}
+
+        if($usuario['password'] != ""){
+           $user -> password = bcrypt($usuario['password']);
         }
 
-       // $usuario['avatar'] = $filename;
-        $user -> avatar = $filename;
-        $user -> userName = $usuario['userName'];
+        // $usuario['avatar'] = $filename;
+        //$user -> userName = $usuario['userName'];
         $user -> nombre = $name;
         $user -> email = $usuario['email'];
         $user -> fechaNacimiento = $fecha;
         $user -> genero = $usuario['genero'];
-        $user -> password = bcrypt($usuario['password']);
         $user -> tipoUsuario = 'Usuario';
         $user -> activo = 1;
         $user -> bloqueado = 0;

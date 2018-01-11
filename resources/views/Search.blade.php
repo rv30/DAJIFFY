@@ -43,7 +43,7 @@
         <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-transparent">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                       <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
                       <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
@@ -144,22 +144,37 @@
                     <form v-on:submit.prevent="searchTitle" method="post" enctype="multipart/form-data" class="nk-form nk-form-ajax">
                         <div class="nk-gap-1"></div>
                         <input type="text" class="form-control required" name="search" v-model="busqueda" placeholder="Search"><br>
-                        <input type="submit" value="Buscar">
+                        <input type="submit" class="nk-btn" value="Search">
                     </form>
                     <!-- END: Form -->
                 </div>
             </div>
 
             <!-- END: Filter -->
+            <h1 class="nk-post-title h1">Posts</h1>
               <div class="Post" v-for="lista in contenido">
                   <div class="PostInfo">
                     <a :href="'/singlePost/' + lista.id">
-                        <img class="imagenContenido" :src="'http://dajiffy.test:8000/vueGetContentImage/'+ lista.user.userName +'/'+ lista.content"/>
+                        <img class="imagenContenido" :src="rootUrl+'vueGetContentImage/'+ lista.user.userName +'/'+ lista.content"/>
                         <h4>@{{lista.titulo}}</h4>
                         <br>
                         <h3>@{{lista.descripcionContenido}}</h3>
                     </a>
                   </div>
+              </div>
+              <br>
+              <h1 class="nk-post-title h1">Users</h1>
+              <div>
+                <div class="Post" v-for="lista in usuarios">
+                    <div class="PostInfo">
+                      <a :href="'/profile/' + lista.id">
+                          <img class="imagenContenido" :src="rootUrl+'vueGetProfileImage/'+ lista.userName +'/'+ lista.avatar"/>
+                          <h4>@{{lista.nombre}}</h4>
+                          <br>
+                          <h3>@{{lista.email}}</h3>
+                      </a>
+                    </div>
+                </div>
               </div>
 
 
@@ -168,9 +183,9 @@
       </div>
 
         <!-- START: Pagination -->
-        <div class="nk-pagination nk-pagination-center">
+        <!--<div class="nk-pagination nk-pagination-center">
             <a href="#">Load More Works</a>
-        </div>
+        </div>-->
         <!-- END: Pagination -->
 
 
@@ -185,10 +200,9 @@
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
 
@@ -200,7 +214,7 @@
         </footer>
         <!-- END: Footer -->
       </div>
-    
+
     <!-- START: Scripts -->
 
     <script src="{{ asset('assets/js/combined.js') }}"></script>
@@ -213,7 +227,9 @@
               data: {
                 contenido: [],
                 usuario: null,
-                busqueda: ""
+                usuarios: [],
+                busqueda: "",
+                rootUrl: "{{ Config::get('helper.url') }}"
               },
               methods: {
                 searchTitle() {
@@ -221,7 +237,8 @@
                     axios.get("/vueSearchTitle/"+this.busqueda)
                     .then(res=>{
                       console.log(res)
-                      this.contenido = res.data.contenidos
+                      this.contenido = res.data.contenidos;
+                      this.usuarios = res.data.usuarios;
                     })
                   }
                   // searchTitle: function() {

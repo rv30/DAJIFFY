@@ -56,7 +56,7 @@
         <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-transparent">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                         <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" width="85" class="nk-nav-logo-onscroll">
                         <img src="{{ asset('assets/images/logoSVG-dajiffy.svg') }}" alt="" width="85">
                     </a>
@@ -157,30 +157,39 @@
                                     <!-- START: Comment -->
                                     <div class="nk-comment">
                                         <div class="nk-comment-avatar">
-                                            <a href="#">
+                                            <a href="">
                                                 <img :src="rootUrl+'vueGetProfileImage/'+ usuario.userName +'/'+ usuario.avatar">
                                             </a>
                                         </div>
                                         <div class="nk-comment-meta">
                                             <div class="nk-gap-2"></div>
-                                            <div class="nk-comment-name"><a href="#" style="font-size: 20px;">@{{usuario.nombre}}</a></div>
-                                            <div class="nk-comment-name"><a href="#" style="font-size: 20px;">@{{usuario.userName}}</a></div>
-                                            <!--
-                                                aqui
-                                            -->
-                                            <div class="nk-comment-reply"><a href="#">Follow</a></div>
-                                            <div class="nk-comment-reply"><a href="#">Unfollow</a></div><br><br>
-                                            <a href="/editProfile"><button class="nk-btn">Edit Profile</button></a>
-                                            <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">100 Following</a></div>
-                                            <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">55 Followers</a></div>
-                                            <div class="nk-comment-reply"><a href="#" style="font-size: 20px;">14 Posts</a></div>
+                                            <div class="nk-comment-name">
+                                                <a href="" style="font-size: 20px;">@{{usuario.userName}}</a>
+                                            </div>
+                                            <!--<div class="nk-comment-name">
+                                                <a href="" style="font-size: 20px;">@{{usuario.nombre}}</a>
+                                            </div>-->
+                                            <!--<div v-if="usuario.id == {{Auth::user()->id}}">
+                                                <a href="/editProfile"><button class="nk-btn">Edit Profile</button></a>
+                                            </div>-->
+                                            <div class="nk-comment-reply">
+                                                <a href="#" style="font-size: 20px;">@{{postCount}} Posts</a>
+                                            </div>
+                                        </div>
+                                        <div class="nk-comment-meta">
+                                            <div v-if="usuario.id == {{Auth::user()->id}}">
+                                                <a :href="'/editProfile/' + usuario.id"><button class="nk-btn">Edit Profile</button></a>
+                                                <a href="/uploadPost"><button class="nk-btn">Upload Post</button></a>
+                                            </div>
+                                            
                                         </div>
                                     </div>
+                                    <!-- END: Comment -->
                                     <div class="nk-gap-2"></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- END: Comment -->
+                        
 
             <div class="Post" v-for="lista in contenido">
                 <div class="PostInfo">
@@ -192,55 +201,18 @@
                   </a>
                 </div>
             </div>
-            <!-- <div class="nk-portfolio-list nk-isotope nk-isotope-4-cols">
-
-            <ol>
-              <li v-for="lista in contenido">
-                <div class="nk-isotope-item">
-                    <div class="nk-portfolio-item nk-portfolio-item-square nk-portfolio-item-info-style-1">
-                        <a :href="'/singlePost/' + lista.id" class="nk-portfolio-item-link"></a>
-                        <div class="nk-portfolio-item-image"> -->
-                            <!-- <div style="background-image: url({{ asset('assets/images/portfolio-7-sm.jpg') }});"></div> -->
-                            <!-- <img :src="'http://dajiffy.test:8000/vueGetContentImage/'+ usuario.userName +'/'+ lista.content">
-                        </div>
-                        <div class="nk-portfolio-item-info nk-portfolio-item-info-center text-xs-center">
-                            <div>
-                                <h2 class="portfolio-item-title h3">@{{lista.titulo}} @{{lista.id}} @{{lista.tipo}}</h2>
-                                <div class="portfolio-item-category">@{{lista.descripcionContenido}}</div>
-
-                                <h2 class="portfolio-item-title h3">25 Likes</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </li>
-            </ol>
-
-            </div> -->
-
             <div class="nk-gap-4"></div>
         </div>
 
-        <!-- START: Pagination -->
-        <div class="nk-pagination nk-pagination-center">
-            <a href="#">Load More Works</a>
-        </div>
-        <!-- END: Pagination -->
-
-        <!--
-    START: Footer
--->
+        <!--START: Footer-->
         <footer class="nk-footer">
-
-
             <div class="nk-footer-cont">
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
 
@@ -264,6 +236,7 @@
     data: {
         usuario: null,
         contenido: [],
+        postCount: 0,
         rootUrl: "{{ Config::get('helper.url') }}"
         },
         methods: {
@@ -300,6 +273,10 @@
                 console.log(this.usuario);
                 this.contenido = this.usuario.contents;
                 console.log(this.contenido);
+              })
+              axios.post("/vuePostCount/"+ id)
+              .then(res=>{
+                this.postCount = res.data.postCount;
               })
             }
         });

@@ -25,13 +25,13 @@ Route::resource('User','UserController');
 
 Route::group(['middleware'=>'auth:api'], function(){
     Route::post('/prueba',function(){
-        return view('AdminPage');   
+        return view('AdminPage');
     });
 });
 
 Route::group(['middleware'=>'VerifyCsrfToken'], function(){
     Route::post('/CsrfTest',function(){
-        return view('AdminPage');   
+        return view('AdminPage');
     });
 });
 
@@ -71,7 +71,7 @@ Route::get('editPost', function () {
     return view('EditPost');
 });
 
-Route::get('editProfile', function () {
+Route::get('editProfile/{id}', function () {
     return view('EditProfile');
 });
 
@@ -141,6 +141,8 @@ Route::get("/vueLogOut","UserController@logOut");
 
 Route::get("/vueGetProfileImage/{userName}/{name}","ContentController@getProfileImage");
 
+Route::post("/vueHomeContents","ContentController@homeContents");
+
 Route::post("/vueContentUserProfile","ContentController@userContents");
 
 Route::post("/vueUploadContent","ContentController@uploadPost");
@@ -168,6 +170,8 @@ Route::post("/vueSearchDate","SearchController@searchDateContents");
 Route::post("/vueLikePost","ContentController@likePost");
 
 Route::post("/vueCommentPost","ContentController@commentPost");
+
+Route::post("/vuePostCount/{id}","UserController@postCount");
 
 //Route::post('indexPrueba','User@login');
 

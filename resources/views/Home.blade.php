@@ -26,13 +26,6 @@
 
     <script type="text/javascript" src="js/axios.js"></script>
 
-    <style>
-        .miContenido{
-          position: relative !important;
-          display:block !important;
-        }
-    </style>
-
     <!-- END: Styles -->
 
 </head>
@@ -48,7 +41,7 @@
         <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-transparent">
             <div class="container">
                 <div class="nk-nav-table">
-                    <a href="home.html" class="nk-nav-logo">
+                    <a href="/home" class="nk-nav-logo">
                         <img src="assets/images/logo-light.svg" alt="" width="85" class="nk-nav-logo-onscroll">
                         <img src="assets/images/logoSVG-dajiffy.svg" alt="" width="85">
                     </a>
@@ -138,80 +131,70 @@
     <!-- END: Navbar Mobile -->
 
 
-    <div class="nk-main">
+<div class="nk-main">
+
         <div class="container">
             <div class="row">
+                <div class="col-lg-8 offset-lg-2">
                     <div class="nk-pagination nk-pagination-nobg nk-pagination-center">
                         <a href="/search">
                             <span class="nk-icon-squares"></span>
                         </a>
                     </div>
+
+
                     <div id="app">
-                      <div v-for="contenido in contenidos">
-                        <div class="miContenido">
-                        <!-- START: Post -->
 
-                        <div class="nk-isotope-item">
-                            <div class="nk-blog-post">
-                                <div class="nk-post-thumb">
-                                    <a :href="'/singlePost/' + contenido.id">
-                                        <img :src="rootUrl+'vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content" alt="" class="nk-img-stretch">
-                                    </a>
-                                    <div class="nk-post-category"><button @click.prevent="likePost(contenido)" class="btn btn-primary">Like</button></div>
-                                    <div class="nk-post-category"><button class="btn btn-primary" @click="deletePost(contenido)">Delete</button></div>
-                                </div>
-                                <h2 class="nk-post-title h4"><a href="blog-single.html">@{{contenido.titulo}}</a></h2>
+                     
+                    <!-- START: Post --> 
+                    <div v-for="contenido in contenidos">
+                        <div class="nk-blog-isotope nk-isotope-gap nk-isotope-1-cols"> 
+                            <div class="nk-isotope-item">
+                                <div class="nk-blog-post">
+                                    <div class="nk-post-thumb">
+                                        <a :href="'/singlePost/' + contenido.id">
+                                            <img :src="rootUrl+'vueGetContentImage/'+ contenido.user.userName +'/'+ contenido.content" alt="" class="nk-img-stretch">
+                                        </a>
+                                        <div class="nk-post-category">
+                                            <a role="button" @click.prevent="likePost(contenido)">Like</a>
+                                        </div>
+                                        <!--<div class="nk-post-category">
+                                            <a role="button" v-if="contenido.idUsuario == {{Auth::user()->id}}" @click="deletePost(contenido)">Delete</a>
+                                        </div>--> 
+                                    </div>
+                                    <h2 class="nk-post-title h4"><a :href="'/singlePost/' + contenido.id">@{{contenido.titulo}}</a></h2>
 
-                                <div class="nk-post-comments-count">@{{contenido.likes_count}} Likes</div>
-                                <div class="nk-post-comments-count">2 Comments</div>
+                                    <div class="nk-post-date">@{{contenido.likes_count}} Likes</div>
+                                    <div class="nk-post-date">@{{contenido.comments_count}} Comments</div>
 
-                                <div class="nk-post-text">
-                                    <p>@{{contenido.descripcionContenido}}</p>
-                                </div>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-post-meta">
-                                    <div class="nk-post-date">August 14, 2017</div>
+                                    <div class="nk-post-text">
+                                        <p>@{{contenido.descripcionContenido}}</p>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="nk-gap-2"></div>
                         </div>
-                      </div>
-                        <!-- END: Post -->
-                      </div>
-                    <!-- </div> -->
                     </div>
-
-                <!-- </div> -->
+                    <!-- END: Post --> 
+                    
+                    </div>
+                </div>
             </div>
-
             <div class="nk-gap-4"></div>
-
         </div>
+      
 
-        <!-- START: Pagination -->
-        <div class="nk-pagination nk-pagination-center">
-            <a href="#">Load More Posts</a>
-        </div>
-        <!-- END: Pagination -->
-
-      </div>
-
-        <!--
-    START: Footer
--->
+        <!--START: Footer-->
         <footer class="nk-footer">
-
-
             <div class="nk-footer-cont">
                 <div class="container text-xs-center">
                     <div class="nk-footer-social">
                         <ul>
-                            <li><a href="https://twitter.com/nkdevv"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com/unvabdesign/"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="https://dribbble.com/_nK"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="https://www.instagram.com/unvab/"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://twitter.com/GbeltranMonte"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/Dajiffy-128525647950143/"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/dajiffy/"><i class="fa fa-instagram"></i></a></li>
                         </ul>
                     </div>
-
                     <div class="nk-footer-text">
                         <p>2017 &copy; Created by Rafael & Gonzalo</p>
                     </div>
@@ -219,11 +202,10 @@
             </div>
         </footer>
         <!-- END: Footer -->
-
+</div>
 
 
     <!-- START: Scripts -->
-
     <script src="assets/js/combined.js"></script>
 
     <script>
@@ -237,7 +219,7 @@
             rootUrl: "{{ Config::get('helper.url') }}"
           },
           created(){
-            axios.post("/vueContentUserProfile")
+            axios.post("/vueHomeContents")
             .then(res=>{
               this.contenidos = res.data.contenidos;
               console.log(this.contenidos);
@@ -262,7 +244,7 @@
             axios.post("/vueLikePost",data)
             .then(res=>{
                 console.log(res.data)
-                if (res.data.Mensaje=='Si Like') 
+                if (res.data.Mensaje=='Si Like')
                 {
                     post.likes_count+=1
                 }
@@ -280,9 +262,7 @@
     })
   });
     </script>
-
     <!-- END: Scripts -->
-<!-- </div> -->
 </body>
 
 </html>
